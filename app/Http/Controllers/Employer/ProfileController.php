@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers\Employer;
 
 use App\Models\User;
 use App\Models\Company;
@@ -9,19 +9,18 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CompanyRequest;
 use Illuminate\Http\RedirectResponse;
 
-class DadosDaEmpresaController extends Controller
+class ProfileController extends Controller
 {
- 
     public function index(): View
     {
         $empresa = auth()->user()->company;
 
         $formConfig = [
-            'action' => $empresa ? route('dashboard.dados-da-empresa.update', $empresa->id) : route('dashboard.dados-da-empresa.store'),
+            'action' => $empresa ? route('employer.dados-da-empresa.update', $empresa->id) : route('employer.dados-da-empresa.store'),
             'method' => $empresa ? 'PUT' : 'POST',
         ];
         
-        return view('dashboard.dados_empresa.index', compact('empresa', 'formConfig'));
+        return view('employer.dados_empresa.index', compact('empresa', 'formConfig'));
     }
     
     public function store(CompanyRequest $request): RedirectResponse
@@ -43,7 +42,7 @@ class DadosDaEmpresaController extends Controller
             User::where('id', auth()->id())
                 ->update(['email_verified_at' => now()]);
             
-            return redirect()->route('dashboard.dados-da-empresa.index')
+            return redirect()->route('employer.dados-da-empresa.index')
                 ->with('success', 'Dados da empresa criados com sucesso.');
                 
         } catch (\Exception $e) {
@@ -79,7 +78,7 @@ class DadosDaEmpresaController extends Controller
             
             $company->update($data);
 
-            return redirect()->route('dashboard.dados-da-empresa.index')
+            return redirect()->route('employer.dados-da-empresa.index')
                 ->with('success', 'Dados da empresa atualizados com sucesso.');
                 
         } catch (\Exception $e) {

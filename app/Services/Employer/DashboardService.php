@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Employer;
 
-class CompanyDashboardService
+class DashboardService
 {
     
     private $company;

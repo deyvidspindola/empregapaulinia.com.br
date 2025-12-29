@@ -1,14 +1,14 @@
 @php
-$sizes = ['1-10','11-50','51-200','201-500','501-1000','1000+'];
+$genders = ['Male' => 'Masculino','Female' => 'Feminino','Other' => 'Outro','Prefer not to say' => 'Prefiro não informar'];
 @endphp
-<x-admin-layout title="Dados da Empresa" subtitle="Insira os dados da sua empresa">
+<x-admin-layout title="Meus Dados" subtitle="Informe seus dados">
 
     @if(session('success'))
         <x-ui.message type="success" :message="session('success')" />
     @endif
 
-    <x-form :action="$formConfig['action']" :method="$formConfig['method']">
-        <x-ui.card title="Dados Da Empresa">
+    <x-form :formConfig="$formConfig">
+        <x-ui.card title="Dados Pessoais">
             <div class="uploading-outer">
             <div class="uploadButton">
                 <input class="uploadButton-input" type="file" name="logo" accept="image/*" id="upload" />
@@ -19,42 +19,34 @@ $sizes = ['1-10','11-50','51-200','201-500','501-1000','1000+'];
             </div>            
             <div class="row">
                 <x-form.input 
-                    label="Nome da Empresa" 
+                    label="Nome" 
                     name="name" 
-                    placeholder="Digite o nome da empresa" 
-                    :value="old('name', $empresa->name ?? '')"
+                    placeholder="Digite seu nome" 
+                    :value="old('name', $candidato->name ?? '')"
                     required 
-                    cols="col-md-6"
+                    cols="col-md-9"
                 />
                 <x-form.input 
-                    label="Nome Fantasia (opcional)" 
-                    name="trade_name" 
-                    placeholder="Digite o nome fantasia da empresa" 
-                    :value="old('trade_name', $empresa->trade_name ?? '')"
-                    cols="col-md-6"
+                    label="CPF" 
+                    name="cpf" 
+                    placeholder="Digite o CPF" 
+                    :value="old('cpf', $candidato->cpf ?? '')"
+                    cols="col-md-3"
                 />
                 <x-form.input 
-                    label="CNPJ" 
-                    name="tax_id" 
-                    placeholder="Digite o CNPJ da empresa" 
-                    :value="old('tax_id', $empresa->tax_id ?? '')"
+                    label="Data de Nascimento" 
+                    name="birth_date" 
+                    placeholder="Digite a data de nascimento" 
+                    :value="old('birth_date', $candidato->birth_date ?? '')"
                     required 
-                    cols="col-md-4"
-                />
-                <x-form.input 
-                    label="Setor de Atividade" 
-                    name="industry" 
-                    placeholder="Digite o setor de atividade da empresa" 
-                    :value="old('industry', $empresa->industry ?? '')"
-
                     cols="col-md-4"
                 />
                 <x-form.select
                     cols="col-md-4"
-                    label="Categoria"
-                    name="company_size"
-                    :options="collect($sizes)->mapWithKeys(fn($s)=>[$s=> $s.' colaboradores'])->all()"                    
-                    :selected="old('company_size', $empresa->company_size ?? '')"
+                    label="Gênero (opcional)"
+                    name="gender"
+                    :options="collect($genders)->all()"                    
+                    :selected="old('gender', $candidato->gender ?? '')"
                 />                                                                            
             </div>
         </x-ui.card>
@@ -65,7 +57,7 @@ $sizes = ['1-10','11-50','51-200','201-500','501-1000','1000+'];
                     label="CEP" 
                     name="zip" 
                     placeholder="Digite o CEP" 
-                    :value="old('zip', $empresa->zip ?? '')"
+                    :value="old('zip', $candidato->zip ?? '')"
                     required 
                     cols="col-md-2"
                 />
@@ -73,7 +65,7 @@ $sizes = ['1-10','11-50','51-200','201-500','501-1000','1000+'];
                     label="Endereço" 
                     name="street" 
                     placeholder="Digite o endereço" 
-                    :value="old('street', $empresa->street ?? '')"
+                    :value="old('street', $candidato->street ?? '')"
                     required
                     cols="col-md-8"
                 />
@@ -81,7 +73,7 @@ $sizes = ['1-10','11-50','51-200','201-500','501-1000','1000+'];
                     label="Número" 
                     name="number" 
                     placeholder="Digite o número" 
-                    :value="old('number', $empresa->number ?? '')"
+                    :value="old('number', $candidato->number ?? '')"
                     required 
                     cols="col-md-2"
                 />
@@ -89,14 +81,14 @@ $sizes = ['1-10','11-50','51-200','201-500','501-1000','1000+'];
                     label="Complemento" 
                     name="complement" 
                     placeholder="Digite o complemento" 
-                    :value="old('complement', $empresa->complement ?? '')"
+                    :value="old('complement', $candidato->complement ?? '')"
                     cols="col-md-2"
                 />                                            
                 <x-form.input 
                     label="Bairro" 
                     name="neighborhood" 
                     placeholder="Digite o bairro" 
-                    :value="old('neighborhood', $empresa->neighborhood ?? '')"
+                    :value="old('neighborhood', $candidato->neighborhood ?? '')"
                     required 
                     cols="col-md-4"
                 />
@@ -104,7 +96,7 @@ $sizes = ['1-10','11-50','51-200','201-500','501-1000','1000+'];
                     label="Cidade" 
                     name="city" 
                     placeholder="Digite a cidade" 
-                    :value="old('city', $empresa->city ?? '')"
+                    :value="old('city', $candidato->city ?? '')"
                     required 
                     cols="col-md-4"
                 />
@@ -112,7 +104,7 @@ $sizes = ['1-10','11-50','51-200','201-500','501-1000','1000+'];
                     label="Estado" 
                     name="state" 
                     placeholder="Digite o estado" 
-                    :value="old('state', $empresa->state ?? '')"
+                    :value="old('state', $candidato->state ?? '')"
                     required 
                     cols="col-md-2"
                 />                                                
@@ -125,17 +117,10 @@ $sizes = ['1-10','11-50','51-200','201-500','501-1000','1000+'];
                     label="Telefone" 
                     name="phone" 
                     placeholder="Digite o telefone" 
-                    :value="old('phone', $empresa->phone ?? '')"
+                    :value="old('phone', $candidato->phone ?? '')"
                     required 
                     cols="col-md-4"
-                />
-                <x-form.input 
-                    label="Site (opcional)" 
-                    name="website" 
-                    placeholder="Digite o site" 
-                    :value="old('website', $empresa->website ?? '')"
-                    cols="col-md-8"
-                />                                                
+                />                                               
             </div>
         </x-ui.card>
     </x-form>  

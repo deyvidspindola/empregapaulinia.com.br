@@ -51,7 +51,7 @@ class RegisteredUserController extends Controller
         $this->sendEmailNewUser($user);
 
         if (Auth::user()->is_employer) {
-            return redirect()->intended(route('dashboard.dashboard', absolute: false));
+            return redirect()->intended(route('employer.dashboard', absolute: false));
         }
 
         return redirect()->intended(route('candidate.dashboard', absolute: false));

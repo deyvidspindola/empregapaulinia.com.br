@@ -12,7 +12,7 @@
         </a>
         <ul class="dropdown-menu">
             <li class="active">
-                <a href="{{ route('dashboard.dashboard') }}">
+                <a href="{{ route('employer.dashboard') }}">
                     <i class="la la-home"></i> Dashboard
                 </a>
             </li>

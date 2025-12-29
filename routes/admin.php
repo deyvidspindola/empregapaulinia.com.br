@@ -6,9 +6,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'v
         return view('admin.dashboard');
     })->name('dashboard');
 
-    Route::get('/empresas', function () {
-        return view('admin.empresas.index');
-    })->name('empresas');    
+    Route::get('/empresas', 'App\Http\Controllers\Admin\CompaniesController@index')->name('empresas');
+    // Route::get('/candidatos', 'App\Http\Controllers\Admin\CandidatesController@index')->name('candidatos');
 
     Route::get('/candidatos', function () {
         return view('admin.candidatos.index');

@@ -65,4 +65,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
+
+    Route::get('/alterar_senha', function () {
+        return view('employer.dashboard');
+    })->name('alterar_senha');        
 });

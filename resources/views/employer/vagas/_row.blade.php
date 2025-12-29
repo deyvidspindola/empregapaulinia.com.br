@@ -2,11 +2,11 @@
     $actions = [
         [
             'type' => 'edit',
-            'route' => route('dashboard.vagas.edit', ['vaga' => $item['id']]),
+            'route' => route('employer.vagas.edit', ['vaga' => $item['id']]),
         ],
         [
             'type' => 'delete',
-            'route' => route('dashboard.vagas.destroy', ['vaga' => $item['id']]),
+            'route' => route('employer.vagas.destroy', ['vaga' => $item['id']]),
         ],
     ];
 @endphp

@@ -3,7 +3,10 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get(
+    '/', 
+    [App\Http\Controllers\HomeController::class, 'index']
+)->name('home');
 
 Route::group(['prefix' => 'vagas'], function () {
     Route::get('/', [App\Http\Controllers\Web\VagasController::class, 'index'])->name('jobs');
@@ -25,13 +28,7 @@ Route::post('vaga/{job}/apply', [App\Http\Controllers\Web\VagasController::class
     ->middleware('auth', 'apply')
     ->name('jobs.apply');
 
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
 require __DIR__.'/auth.php';
 require __DIR__.'/admin.php';
-require __DIR__.'/dashboard.php';
+require __DIR__.'/employer.php';
+require __DIR__.'/candidate.php';

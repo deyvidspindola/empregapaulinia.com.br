@@ -1,6 +1,6 @@
 <x-admin-layout title="Vagas" subtitle="Cadastrar nova vaga">
     <x-ui.card title="Dados da Vaga">
-        <x-form :action="$formConfig['action']" :method="$formConfig['method']">
+        <x-form :formConfig="$formConfig">
             <x-form.input 
                 label="Título da Vaga" 
                 name="title" 

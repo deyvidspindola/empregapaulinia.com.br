@@ -1,18 +1,17 @@
 @props([
-    'action'     => '#',
-    'method'     => 'POST', // POST | PUT
+    'formConfig' => [],
     'buttonText' => 'Salvar Alterações',
 ])
 
 <form
     class="default-form"
-    action="{{ $action }}"
+    action="{{ $formConfig['action'] ?? '#' }}"
     method="POST"
     enctype="multipart/form-data"
 >
     @csrf
 
-    @if (strtoupper($method) === 'PUT')
+    @if (strtoupper($formConfig['method'] ?? 'POST') === 'PUT')
         @method('PUT')
     @endif
 

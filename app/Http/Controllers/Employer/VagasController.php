@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers\Employer;
 
 use App\Models\JobPosting;
 use App\Http\Enum\JobTypes;
@@ -10,12 +10,19 @@ use App\Http\Requests\VagasRequest;
 
 class VagasController extends Controller
 {
+
+    public function __construct(
+        protected JobPosting $jobPosting,
+        protected JobCategory $jobCategory
+    ) {}
+
     public function index()
     {
-        $jobs = JobPosting::paginate(10)
-            ->where('company_id', auth()->user()->company?->id);
+        $jobs = $this->jobPosting
+            ->where('company_id', auth()->user()->company?->id)
+            ->paginate(10);
             
-        return view('dashboard.vagas.index', 
+        return view('employer.vagas.index', 
             compact(
                 'jobs'
             )
@@ -24,13 +31,13 @@ class VagasController extends Controller
 
     public function create()
     {
-        $categories = JobCategory::all()->pluck('name', 'id');
+        $categories = $this->jobCategory->all()->pluck('name', 'id');
         $jobTypes = JobTypes::options();
         $formConfig = [
             'method' => 'POST',
-            'action' => route('dashboard.vagas.store'),
+            'action' => route('employer.vagas.store'),
         ];
-        return view('dashboard.vagas.form', 
+        return view('employer.vagas.form', 
             compact(
                 'categories',
                 'jobTypes',
@@ -42,26 +49,26 @@ class VagasController extends Controller
     public function store(VagasRequest $request) 
     {
         $user = auth()->user();
-        JobPosting::create([
+        $this->jobPosting->create([
             ...$request->validated(),
             'user_id' => $user->id,
             'company_id' => $user->company?->id,
             'slug' => \Str::slug($request->validated('title')),
         ]);
         
-        return redirect()->route('dashboard.vagas.index')
+        return redirect()->route('employer.vagas.index')
             ->with('success', 'Vaga criada com sucesso!');
     }
 
     public function edit(JobPosting $vaga)
     {
-        $categories = JobCategory::all()->pluck('name', 'id');
+        $categories = $this->jobCategory->all()->pluck('name', 'id');
         $jobTypes = JobTypes::options();
         $formConfig = [
             'method' => 'PUT',
-            'action' => route('dashboard.vagas.update', $vaga),
+            'action' => route('employer.vagas.update', $vaga),
         ];
-        return view('dashboard.vagas.form', 
+        return view('employer.vagas.form', 
             compact(
                 'vaga',
                 'categories',
@@ -75,7 +82,7 @@ class VagasController extends Controller
     {
         $vaga->update($request->validated());
 
-        return redirect()->route('dashboard.vagas.index')
+        return redirect()->route('employer.vagas.index')
             ->with('success', 'Vaga atualizada com sucesso!');
     }
 
@@ -83,7 +90,7 @@ class VagasController extends Controller
     {
         $vaga->delete();
 
-        return redirect()->route('dashboard.vagas.index')
+        return redirect()->route('employer.vagas.index')
             ->with('success', 'Vaga excluída com sucesso!');
     }
 

@@ -24,7 +24,7 @@
   <!-- Mobile Header -->
   <div class="mobile-header">
     <div class="logo">
-      <a href="{{ route('dashboard.dashboard') }}">
+      <a href="{{ route('employer.dashboard') }}">
         <img src="{{ asset('images/logo.svg') }}" alt="" title="">
       </a>
     </div>

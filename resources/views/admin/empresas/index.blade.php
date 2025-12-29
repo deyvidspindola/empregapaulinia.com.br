@@ -1,24 +1,8 @@
-@php
-
-    $items = collect([
-        [
-            'name' => 'Empresa XYZ',
-            'email' => 'contato@empresaxyz.com',
-            'telefone' => '(11) 99999-9999',
-        ],
-        [
-            'name' => 'Empresa ABC',
-            'email' => 'contato@empresaabc.com',
-            'telefone' => '(11) 98888-8888',
-        ],
-    ]);
-
-@endphp
-<x-admin-layout>
+<x-admin-layout title="Empresas" subtitle="Lista de empresas cadastradas no sistema">
     <x-ui.table 
         title="Empresas"
-        :headers="['Nome', 'Email', 'Telefone']"
+        :headers="['Empresa', 'Responsavel', 'Cidade', 'industry', 'Cadastrado em']"
         rowView="admin.empresas._row"
-        :items="$items"
+        :items="$companies"
     />
 </x-admin-layout>

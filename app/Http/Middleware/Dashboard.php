@@ -21,23 +21,23 @@ class Dashboard
         if (
             $user->is_employer &&   
             $user->email_verified_at === null && 
-            $routeName !== 'dashboard.dados-da-empresa.index' &&
-            $routeName !== 'dashboard.dados-da-empresa.store'
+            $routeName !== 'employer.dados-da-empresa.index' &&
+            $routeName !== 'employer.dados-da-empresa.store'
         ) {
-            return redirect()->route('dashboard.dados-da-empresa.index');
+            return redirect()->route('employer.dados-da-empresa.index');
         }
 
         // if (
         //     $user->is_candidate &&
         //     $user->email_verified_at === null && 
-        //     $routeName !== 'dashboard.dados-da-empresa.index' &&
-        //     $routeName !== 'dashboard.dados-da-empresa.store'
+        //     $routeName !== 'employer.dados-da-empresa.index' &&
+        //     $routeName !== 'employer.dados-da-empresa.store'
         // ) {
-        //     return redirect()->route('dashboard.dados-da-empresa.index');
+        //     return redirect()->route('employer.dados-da-empresa.index');
         // }
 
         if($user->is_employer && $routeName === 'candidate.dashboard') {
-            return redirect()->route('dashboard.dashboard');
+            return redirect()->route('employer.dashboard');
 
         }
 

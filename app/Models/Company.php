@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
 class Company extends Model
@@ -35,6 +36,13 @@ class Company extends Model
     public function jobs()
     {
         return $this->hasMany(JobPosting::class);
+    }
+
+    protected function createdAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => \Carbon\Carbon::parse($value)->format('d/m/Y'),
+        );
     }
 
 }
