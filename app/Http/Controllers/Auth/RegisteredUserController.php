@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
+use Mail;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
-use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Auth\Events\Registered;
 
 class RegisteredUserController extends Controller
 {
@@ -47,10 +48,33 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
+        $this->sendEmailNewUser($user);
+
         if (Auth::user()->is_employer) {
             return redirect()->intended(route('dashboard.dashboard', absolute: false));
         }
 
         return redirect()->intended(route('candidate.dashboard', absolute: false));
     }
+
+    private function sendEmailNewUser(User $user): void
+    {
+        try {
+
+            if($user->is_employer) {
+                Mail::to($user->email)->send(new \App\Mail\NewEmployerRegistered($user));
+                return;
+            } else if($user->is_candidate) {
+                Mail::to($user->email)->send(new \App\Mail\NewCandidateRegistered($user));
+                return;
+            }
+
+        } catch (\Exception $e) {
+            logger()->error('Erro ao enviar email de novo usuário registrado: ' . $e->getMessage(), [
+                'user_id' => $user->id,
+                'trace' => $e->getTraceAsString()
+            ]);            
+        }
+    }
+
 }

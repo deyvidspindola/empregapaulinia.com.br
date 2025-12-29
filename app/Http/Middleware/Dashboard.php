@@ -18,9 +18,23 @@ class Dashboard
         $user = $request->user();
         $routeName = $request->route()->getName();
 
-        if ($user->email_verified_at === null && $routeName !== 'dashboard.dados-da-empresa.index') {
+        if (
+            $user->is_employer &&   
+            $user->email_verified_at === null && 
+            $routeName !== 'dashboard.dados-da-empresa.index' &&
+            $routeName !== 'dashboard.dados-da-empresa.store'
+        ) {
             return redirect()->route('dashboard.dados-da-empresa.index');
         }
+
+        // if (
+        //     $user->is_candidate &&
+        //     $user->email_verified_at === null && 
+        //     $routeName !== 'dashboard.dados-da-empresa.index' &&
+        //     $routeName !== 'dashboard.dados-da-empresa.store'
+        // ) {
+        //     return redirect()->route('dashboard.dados-da-empresa.index');
+        // }
 
         if($user->is_employer && $routeName === 'candidate.dashboard') {
             return redirect()->route('dashboard.dashboard');

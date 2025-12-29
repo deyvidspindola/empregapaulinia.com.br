@@ -12,7 +12,9 @@ class VagasController extends Controller
 {
     public function index()
     {
-        $jobs = JobPosting::paginate(10);
+        $jobs = JobPosting::paginate(10)
+            ->where('company_id', auth()->user()->company?->id);
+            
         return view('dashboard.vagas.index', 
             compact(
                 'jobs'

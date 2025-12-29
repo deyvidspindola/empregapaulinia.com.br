@@ -47,6 +47,8 @@ class CompanyRequest extends FormRequest
      */
     public function rules(): array
     {
+        $companyId = $this->route('dados_da_empresa');
+        
         return [
             // Empresa
             'name'           => ['required','string','max:255'],
@@ -55,7 +57,7 @@ class CompanyRequest extends FormRequest
                 'required',
                 'digits:14',
                 new Cnpj(),
-                'unique:companies,tax_id',
+                Rule::unique('companies', 'tax_id')->ignore($companyId),
             ],
             'industry'       => ['nullable','string', 'max:255'],
             'company_size'   => ['nullable','string', Rule::in(self::SIZES)],

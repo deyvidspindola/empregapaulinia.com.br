@@ -1,6 +1,5 @@
 <div class="sidebar-column col-lg-4 col-md-12 col-sm-12">
     <aside class="sidebar">
-        @if(auth()->user()->IsCandidate)
         <div class="btn-box">
             <a 
                 href="{{ route(
@@ -13,8 +12,7 @@
                 Candidatar
             </a>
         </div>
-        @endif
-
+        
         <div class="sidebar-widget">
             <!-- Job Overview -->
             <h4 class="widget-title">Resumo da Vaga</h4>

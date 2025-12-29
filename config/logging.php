@@ -51,6 +51,10 @@ return [
     */
 
     'channels' => [
+        'sentry_logs' => [
+            'driver' => 'sentry_logs',
+            'level' => env('LOG_LEVEL', 'info'), // defaults to `debug` if not set
+        ],
 
         'stack' => [
             'driver' => 'stack',
