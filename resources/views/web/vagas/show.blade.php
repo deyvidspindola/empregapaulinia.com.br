@@ -65,7 +65,7 @@
             <!-- Related Jobs -->
             @include('web.vagas.inc.related-jobs')
           </div>
-          @include('web.vagas.inc.sidebar', ['job' => $job])
+          @include('web.vagas.inc.show-sidebar', ['job' => $job])
         </div>
       </div>
     </div>

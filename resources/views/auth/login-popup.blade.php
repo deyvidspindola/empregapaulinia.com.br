@@ -8,7 +8,7 @@
                 <div class="bottom-box">
                     <div class="text">
                         Não tem conta?
-                        <a href="{{ route('register.popup') }}" class="call-modal signup">Se cadastre aqui</a>
+                        <a href="{{ route('register') }}" class="signup">Se cadastre aqui</a>
                     </div>
                 </div>
             </div>          

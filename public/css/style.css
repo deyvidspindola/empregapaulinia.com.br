@@ -3435,7 +3435,7 @@ Contact Section
 
 .contact-section .contact-form {
   max-width: 850px;
-  margin: 0 auto;
+  margin: -300px auto 0;
   border: 1px solid #ECEDF2;
   border-radius: 8px;
   padding: 50px 50px 70px;

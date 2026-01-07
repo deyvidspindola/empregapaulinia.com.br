@@ -58,10 +58,12 @@
           <div class="row">
             <div class="big-column col-xl-4 col-lg-3 col-md-12">
               <div class="footer-column about-widget">
-                <div class="logo"><a href="#"><img src="images/logo.svg" alt=""></a></div>
-                <p class="phone-num"><span>Call us </span><a href="thebeehost@support.com">123 456 7890</a></p>
-                <p class="address">329 Queensberry Street, North Melbourne VIC<br> 3051, Australia. <br><a
-                    href="mailto:support@superio.com" class="email">support@superio.com</a></p>
+                <div class="logo">
+                    <a href="{{ route('home') }}">
+                        <img src="{{ asset('images/logo.svg') }}" alt="">
+                    </a>
+                </div>
+                <div class="text">Emprega Paulínia é uma plataforma de empregos dedicada a conectar candidatos talentosos com empresas inovadoras na região de Paulínia. Nossa missão é facilitar o processo de recrutamento, oferecendo uma experiência intuitiva e eficiente para ambos os lados.</div>
               </div>
             </div>
 
@@ -69,14 +71,12 @@
               <div class="row">
                 <div class="footer-column col-lg-3 col-md-6 col-sm-12">
                   <div class="footer-widget links-widget">
-                    <h4 class="widget-title">For Candidates</h4>
+                    <h4 class="widget-title">Para Candidatos</h4>
                     <div class="widget-content">
                       <ul class="list">
-                        <li><a href="#">Browse Jobs</a></li>
-                        <li><a href="#">Browse Categories</a></li>
-                        <li><a href="#">Candidate Dashboard</a></li>
-                        <li><a href="#">Job Alerts</a></li>
-                        <li><a href="#">My Bookmarks</a></li>
+                        <li><a href="{{ route('jobs') }}">Vagas</a></li>
+                        <li><a href="#">Cadastrar Currículo</a></li>
+                        <li><a href="{{ route('candidate.dashboard') }}">Painel do Candidato</a></li>
                       </ul>
                     </div>
                   </div>
@@ -85,13 +85,12 @@
 
                 <div class="footer-column col-lg-3 col-md-6 col-sm-12">
                   <div class="footer-widget links-widget">
-                    <h4 class="widget-title">For Employers</h4>
+                    <h4 class="widget-title">Para Empresas</h4>
                     <div class="widget-content">
                       <ul class="list">
-                        <li><a href="#">Browse Candidates</a></li>
-                        <li><a href="#">Employer Dashboard</a></li>
-                        <li><a href="#">Add Job</a></li>
-                        <li><a href="#">Job Packages</a></li>
+                        <li><a href="{{ route('employer.dashboard') }}">Painel do Empregador</a></li>
+                        <li><a href="#">Adicionar Vaga</a></li>
+                        <li><a href="#">Pacotes</a></li>
                       </ul>
                     </div>
                   </div>
@@ -99,14 +98,13 @@
 
                 <div class="footer-column col-lg-3 col-md-6 col-sm-12">
                   <div class="footer-widget links-widget">
-                    <h4 class="widget-title">About Us</h4>
+                    <h4 class="widget-title">Sobre Nós</h4>
                     <div class="widget-content">
                       <ul class="list">
-                        <li><a href="#">Job Page</a></li>
-                        <li><a href="#">Job Page Alternative</a></li>
-                        <li><a href="#">Resume Page</a></li>
+                        <li><a href="{{ route('jobs') }}">Página de Vagas</a></li>
+                        <li><a href="{{ route('polices') }}">Politica de Privacidade</a></li>
+                        <li><a href="{{ route('terms') }}">Termos de Uso</a></li>
                         <li><a href="#">Blog</a></li>
-                        <li><a href="#">Contact</a></li>
                       </ul>
                     </div>
                   </div>
@@ -115,14 +113,12 @@
 
                 <div class="footer-column col-lg-3 col-md-6 col-sm-12">
                   <div class="footer-widget links-widget">
-                    <h4 class="widget-title">Helpful Resources</h4>
+                    <h4 class="widget-title">Recursos Úteis</h4>
                     <div class="widget-content">
                       <ul class="list">
-                        <li><a href="#">Site Map</a></li>
-                        <li><a href="#">Terms of Use</a></li>
-                        <li><a href="#">Privacy Center</a></li>
-                        <li><a href="#">Security Center</a></li>
-                        <li><a href="#">Accessibility Center</a></li>
+                        <li><a href="{{ route('login') }}">Login</a></li>
+                        <li><a href="{{ route('register') }}">Criar Conta</a></li>
+                        <li><a href="{{ route('contact') }}">Contato</a></li>
                       </ul>
                     </div>
                   </div>
@@ -141,8 +137,7 @@
             <div class="copyright-text">© {{date('Y')}} <a href="#">{{ config('app.name', 'Emprega Paulínia') }}</a>.
               Todos os direitos reservados. | Desenvolvido por <a href="#">DMTA</a>.</div>
             <div class="social-links">
-              <a href="#"><i class="fab fa-facebook-f"></i></a>
-              {{-- <a href="#"><i class="fab fa-twitter"></i></a> --}}
+              <a href="https://www.facebook.com/profile.php?id=61579735320956" target="_blank"><i class="fab fa-facebook-f"></i></a>
               <a href="#"><i class="fab fa-instagram"></i></a>
               <a href="#"><i class="fab fa-linkedin-in"></i></a>
             </div>

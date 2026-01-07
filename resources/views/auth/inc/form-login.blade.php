@@ -16,7 +16,7 @@
                     Lembrar me
                 </label>
             </div>
-            <a href="#" class="pwd">Esqueceu a senha?</a>
+            <a href="{{ route('password.request') }}" class="pwd">Esqueceu a senha?</a>
         </div>
     </div>
 

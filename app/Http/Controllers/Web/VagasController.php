@@ -6,19 +6,29 @@ use Illuminate\Http\Request;
 use App\Services\WebVagasService;
 use App\Http\Controllers\Controller;
 use App\Models\JobPosting;
+use App\Models\JobCategory as Category;
 
 class VagasController extends Controller
 {
 
     public function __construct(
-        private WebVagasService $webVagasService
-    )
-    {}
+        private WebVagasService $webVagasService,
+        private Category $category
+    ){}
 
-    public function index()
+    public function index(Request $request)
     {
-        $jobs = $this->webVagasService->getVagas();
-        return view('web.vagas.index', compact('jobs'));
+        $jobs = $this->webVagasService->getAllVagas($request);
+        $categories = $this->category->all();
+        $jobTypes = \App\Http\Enum\JobTypes::options();
+        return view(
+            'web.vagas.index', 
+            compact(
+                'jobs', 
+                'categories', 
+                'jobTypes'
+            )
+        );
     }
 
     public function show($city, $slugOrId, Request $request)

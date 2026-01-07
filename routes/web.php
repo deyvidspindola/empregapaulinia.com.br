@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get(
@@ -27,6 +26,24 @@ Route::post('vaga/{job}/apply', [App\Http\Controllers\Web\VagasController::class
     ->whereNumber('job')
     ->middleware('auth', 'apply')
     ->name('jobs.apply');
+
+
+Route::get('/contato', function () {
+    return view('contact');
+})->name('contact');    
+
+Route::post('/contato', [\App\Http\Controllers\Web\ContactMessageController::class, 'store'])
+    ->name('contact.send');
+
+Route::get('/politicas-privacidade', function () {
+    return view('polices');
+})->name('polices');
+
+# Termos de Uso
+Route::get('/termos-uso', function () {
+    return view('terms');
+})->name('terms');
+
 
 require __DIR__.'/auth.php';
 require __DIR__.'/admin.php';

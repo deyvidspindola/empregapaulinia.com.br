@@ -19,25 +19,25 @@ $genders = ['Male' => 'Masculino','Female' => 'Feminino','Other' => 'Outro','Pre
             </div>            
             <div class="row">
                 <x-form.input 
-                    label="Nome" 
-                    name="name" 
-                    placeholder="Digite seu nome" 
-                    :value="old('name', $candidato->name ?? '')"
+                    label="Nome Completo" 
+                    name="full_name" 
+                    placeholder="Digite seu nome completo" 
+                    :value="old('full_name', auth()->user()->name ?? '')"
                     required 
                     cols="col-md-9"
                 />
                 <x-form.input 
                     label="CPF" 
                     name="cpf" 
-                    placeholder="Digite o CPF" 
-                    :value="old('cpf', $candidato->cpf ?? '')"
+                    placeholder="000.000.000-00" 
+                    :value="old('cpf', $user->cpf ?? '')"
                     cols="col-md-3"
                 />
                 <x-form.input 
                     label="Data de Nascimento" 
                     name="birth_date" 
                     placeholder="Digite a data de nascimento" 
-                    :value="old('birth_date', $candidato->birth_date ?? '')"
+                    :value="old('birth_date', $user->birth_date ?? '')"
                     required 
                     cols="col-md-4"
                 />
@@ -46,7 +46,7 @@ $genders = ['Male' => 'Masculino','Female' => 'Feminino','Other' => 'Outro','Pre
                     label="Gênero (opcional)"
                     name="gender"
                     :options="collect($genders)->all()"                    
-                    :selected="old('gender', $candidato->gender ?? '')"
+                    :selected="old('gender', $user->gender ?? '')"
                 />                                                                            
             </div>
         </x-ui.card>
@@ -56,8 +56,8 @@ $genders = ['Male' => 'Masculino','Female' => 'Feminino','Other' => 'Outro','Pre
                 <x-form.input 
                     label="CEP" 
                     name="zip" 
-                    placeholder="Digite o CEP" 
-                    :value="old('zip', $candidato->zip ?? '')"
+                    placeholder="00000-000" 
+                    :value="old('zip', $user->zip ?? '')"
                     required 
                     cols="col-md-2"
                 />
@@ -65,7 +65,7 @@ $genders = ['Male' => 'Masculino','Female' => 'Feminino','Other' => 'Outro','Pre
                     label="Endereço" 
                     name="street" 
                     placeholder="Digite o endereço" 
-                    :value="old('street', $candidato->street ?? '')"
+                    :value="old('street', $user->street ?? '')"
                     required
                     cols="col-md-8"
                 />
@@ -73,7 +73,7 @@ $genders = ['Male' => 'Masculino','Female' => 'Feminino','Other' => 'Outro','Pre
                     label="Número" 
                     name="number" 
                     placeholder="Digite o número" 
-                    :value="old('number', $candidato->number ?? '')"
+                    :value="old('number', $user->number ?? '')"
                     required 
                     cols="col-md-2"
                 />
@@ -81,14 +81,14 @@ $genders = ['Male' => 'Masculino','Female' => 'Feminino','Other' => 'Outro','Pre
                     label="Complemento" 
                     name="complement" 
                     placeholder="Digite o complemento" 
-                    :value="old('complement', $candidato->complement ?? '')"
+                    :value="old('complement', $user->complement ?? '')"
                     cols="col-md-2"
                 />                                            
                 <x-form.input 
                     label="Bairro" 
                     name="neighborhood" 
                     placeholder="Digite o bairro" 
-                    :value="old('neighborhood', $candidato->neighborhood ?? '')"
+                    :value="old('neighborhood', $user->neighborhood ?? '')"
                     required 
                     cols="col-md-4"
                 />
@@ -96,15 +96,15 @@ $genders = ['Male' => 'Masculino','Female' => 'Feminino','Other' => 'Outro','Pre
                     label="Cidade" 
                     name="city" 
                     placeholder="Digite a cidade" 
-                    :value="old('city', $candidato->city ?? '')"
+                    :value="old('city', $user->city ?? '')"
                     required 
                     cols="col-md-4"
                 />
                 <x-form.input 
                     label="Estado" 
                     name="state" 
-                    placeholder="Digite o estado" 
-                    :value="old('state', $candidato->state ?? '')"
+                    placeholder="UF (ex: SP)" 
+                    :value="old('state', $user->state ?? '')"
                     required 
                     cols="col-md-2"
                 />                                                
@@ -116,8 +116,8 @@ $genders = ['Male' => 'Masculino','Female' => 'Feminino','Other' => 'Outro','Pre
                 <x-form.input 
                     label="Telefone" 
                     name="phone" 
-                    placeholder="Digite o telefone" 
-                    :value="old('phone', $candidato->phone ?? '')"
+                    placeholder="(00) 00000-0000" 
+                    :value="old('phone', $user->phone ?? '')"
                     required 
                     cols="col-md-4"
                 />                                               
@@ -125,3 +125,18 @@ $genders = ['Male' => 'Masculino','Female' => 'Feminino','Other' => 'Outro','Pre
         </x-ui.card>
     </x-form>  
 </x-admin-layout>
+@push('scripts')   
+    <script>
+        $(document).ready(function() {
+
+            // Inicializar o datepicker para o campo de deadline
+            $('#birth_date').datepicker({
+                format: 'dd/mm/yyyy',
+                language: 'pt-BR',
+                autoclose: true,
+                todayHighlight: true,
+            });
+        });
+
+    </script>
+    @endpush

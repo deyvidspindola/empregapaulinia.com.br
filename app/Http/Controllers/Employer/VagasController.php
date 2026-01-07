@@ -48,16 +48,25 @@ class VagasController extends Controller
 
     public function store(VagasRequest $request) 
     {
-        $user = auth()->user();
-        $this->jobPosting->create([
-            ...$request->validated(),
-            'user_id' => $user->id,
-            'company_id' => $user->company?->id,
-            'slug' => \Str::slug($request->validated('title')),
-        ]);
-        
-        return redirect()->route('employer.vagas.index')
-            ->with('success', 'Vaga criada com sucesso!');
+        try {
+            $this->beginTransaction();
+            $user = auth()->user();
+            $this->jobPosting->create([
+                ...$request->validated(),
+                'user_id' => $user->id,
+                'company_id' => $user->company?->id,
+                'slug' => \Str::slug($request->validated('title')),
+            ]);
+            $this->commitTransaction();
+
+            return redirect()->route('employer.vagas.index')
+                ->with('success', 'Vaga criada com sucesso!');
+
+        } catch (\Throwable $e) {
+            $this->rollbackTransaction();
+            $this->logException($e);
+            return back()->with('error', 'Houve um erro ao criar a vaga. Por favor, tente novamente mais tarde.');
+        }
     }
 
     public function edit(JobPosting $vaga)
@@ -80,18 +89,39 @@ class VagasController extends Controller
 
     public function update(VagasRequest $request, JobPosting $vaga)
     {
-        $vaga->update($request->validated());
+        try{
+            $this->beginTransaction();
+            $vaga->update([
+                ...$request->validated(),
+                'slug' => \Str::slug($request->validated('title')),
+            ]);
+            $this->commitTransaction();
 
-        return redirect()->route('employer.vagas.index')
+            return redirect()->route('employer.vagas.index')
             ->with('success', 'Vaga atualizada com sucesso!');
+
+        } catch (\Throwable $e) {
+            $this->rollbackTransaction();
+            $this->logException($e);
+            return back()->with('error', 'Houve um erro ao atualizar a vaga. Por favor, tente novamente mais tarde.');
+        }
     }
 
     public function destroy(JobPosting $vaga)
     {
-        $vaga->delete();
+        try{
+            $this->beginTransaction();
+            $vaga->delete();
+            $this->commitTransaction();
 
-        return redirect()->route('employer.vagas.index')
-            ->with('success', 'Vaga excluída com sucesso!');
+            return redirect()->route('employer.vagas.index')
+                ->with('success', 'Vaga excluída com sucesso!');
+
+        } catch (\Throwable $e) {
+            $this->rollbackTransaction();
+            $this->logException($e);
+            return back()->with('error', 'Houve um erro ao excluir a vaga. Por favor, tente novamente mais tarde.');
+        }
     }
 
 }

@@ -24,7 +24,13 @@ Route::group([
     Route::resource(
         '/dados-da-empresa', 
         'App\Http\Controllers\Employer\ProfileController'
-    )->only(['index', 'store', 'update']);
+    )
+    ->only(['index', 'store', 'update'])
+    ->names([
+        'index' => 'profile.index',
+        'store' => 'profile.store',
+        'update' => 'profile.update',
+    ]);    
 
 
     Route::get('/candidatos', function () {

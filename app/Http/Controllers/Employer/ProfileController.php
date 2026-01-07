@@ -8,6 +8,7 @@ use Illuminate\View\View;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CompanyRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
@@ -16,16 +17,17 @@ class ProfileController extends Controller
         $empresa = auth()->user()->company;
 
         $formConfig = [
-            'action' => $empresa ? route('employer.dados-da-empresa.update', $empresa->id) : route('employer.dados-da-empresa.store'),
+            'action' => $empresa ? route('employer.profile.update', $empresa->id) : route('employer.profile.store'),
             'method' => $empresa ? 'PUT' : 'POST',
         ];
         
-        return view('employer.dados_empresa.index', compact('empresa', 'formConfig'));
+        return view('employer.profile.index', compact('empresa', 'formConfig'));
     }
     
     public function store(CompanyRequest $request): RedirectResponse
     {
         try {
+            $this->beginTransaction();
             $data = $request->validated();
             
             if ($request->hasFile('logo')) {
@@ -42,16 +44,14 @@ class ProfileController extends Controller
             User::where('id', auth()->id())
                 ->update(['email_verified_at' => now()]);
             
-            return redirect()->route('employer.dados-da-empresa.index')
+            $this->commitTransaction();
+
+            return redirect()->route('employer.profile.index')
                 ->with('success', 'Dados da empresa criados com sucesso.');
                 
         } catch (\Exception $e) {
-            logger()->error('Erro ao criar empresa: ' . $e->getMessage(), [
-                'user_id' => auth()->id(),
-                'data' => $request->validated(),
-                'trace' => $e->getTraceAsString()
-            ]);            
-
+            $this->rollbackTransaction();
+            $this->logException($e);
             return redirect()->back()
                 ->withInput()
                 ->with('error', 'Erro ao salvar dados da empresa: ' . $e->getMessage());
@@ -61,6 +61,7 @@ class ProfileController extends Controller
     public function update(CompanyRequest $request, Company $company): RedirectResponse
     {
         try {
+            $this->beginTransaction();
             $data = $request->validated();
             
             // Processa upload da logo
@@ -77,18 +78,15 @@ class ProfileController extends Controller
             unset($data['logo']);
             
             $company->update($data);
+            $this->commitTransaction();
 
-            return redirect()->route('employer.dados-da-empresa.index')
+            return redirect()->route('employer.profile.index')
                 ->with('success', 'Dados da empresa atualizados com sucesso.');
                 
         } catch (\Exception $e) {
-            logger()->error('Erro ao atualizar empresa: ' . $e->getMessage(), [
-                'user_id' => auth()->id(),
-                'company_id' => $company->id,
-                'data' => $request->validated(),
-                'trace' => $e->getTraceAsString()
-            ]);
-            
+            $this->rollbackTransaction();
+            $this->logException($e);
+                            
             return redirect()->back()
                 ->withInput()
                 ->with('error', 'Erro ao atualizar dados da empresa: ' . $e->getMessage());

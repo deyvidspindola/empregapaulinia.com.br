@@ -5,7 +5,7 @@
         <div class="logo-box">
           <div class="logo">
             <a href="{{ route('home') }}">
-              <img src="{{ asset('images/novo_logo.png') }}" alt="" title="">
+              <img src="{{ asset('images/logo.svg') }}" alt="" title="">
             </a>
           </div>
         </div>
