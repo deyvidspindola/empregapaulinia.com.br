@@ -39,9 +39,9 @@
                 </table>
             </div>
             <!-- Pagination -->
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:16px;flex-wrap:wrap">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
                 @if($items instanceof \Illuminate\Contracts\Pagination\LengthAwarePaginator)
-                <div class="text-muted">
+                <div class="text-muted" style="margin-top:-25px;">
                     Mostrando
                     <strong>{{ $items->firstItem() }}</strong>–<strong>{{ $items->lastItem() }}</strong>
                     de <strong>{{ $items->total() }}</strong>

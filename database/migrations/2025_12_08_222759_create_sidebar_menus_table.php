@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('label');
             $table->string('route');
             $table->string('icon')->nullable();
-            $table->smallInteger('possition');
+            $table->smallInteger('position');
             $table->string('role');
             $table->timestamps();
         });

@@ -33,12 +33,13 @@
                 required 
                 cols="col-md-4"
             />
-            <x-form.input 
+            <x-form.input-mask 
                 label="Remuneração" 
                 name="salary" 
                 placeholder="Digite a remuneração da vaga" 
                 :value="old('salary', $vaga->salary ?? '')"
                 required 
+                data-masktype="money"
                 cols="col-md-4"
             />            
             <x-form.textarea 
@@ -75,12 +76,13 @@
                 required 
                 cols="col-md-4"
             />                                                
-            <x-form.input 
+            <x-form.input-mask
                 label="Data de Expiração" 
                 name="deadline" 
                 placeholder="Digite a data de expiração da vaga" 
                 :value="old('deadline', $vaga->deadline_formatted ?? '')"
                 required 
+                data-mask="00/00/0000"
                 cols="col-md-4"                
             />
             <x-form.switch 

@@ -1,5 +1,4 @@
-@if ($paginator->hasPages())
-<nav class="ls-pagination">
+<nav class="ls-pagination margin-paginate">
     <ul>
         @if (!$paginator->onFirstPage())
             <li class="prev">
@@ -29,7 +28,7 @@
             @endif
         @endforeach
 
-        @if (!$paginator->hasMorePages())
+        @if ($paginator->hasMorePages())
             <li class="next">
                 <a href="{{ $paginator->nextPageUrl() }}">
                     <i class="fa fa-arrow-right"></i>
@@ -38,4 +37,3 @@
         @endif
     </ul>
 </nav>
-@endif

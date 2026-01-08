@@ -10,12 +10,6 @@
                 />
             @endforeach
 
-            <x-layouts.partails.sidebar-link
-                route="alterar_senha"
-                icon="la-lock"
-                label="Alterar Senha"
-            />
-
             <li><x-ui.logout icon="la-sign-out"/></li>
 
         </ul>

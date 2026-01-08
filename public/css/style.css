@@ -14189,6 +14189,12 @@ Listing Pagination
 ==================0==================================================
 
 ***/
+
+.margin-paginate{
+  margin-top: -15px !important;
+  margin-bottom: 5px !important;
+}
+
 .ls-pagination {
   position: relative;
   margin-top: 50px;

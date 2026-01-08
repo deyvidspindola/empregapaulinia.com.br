@@ -91,10 +91,9 @@ class VagasController extends Controller
     {
         try{
             $this->beginTransaction();
-            $vaga->update([
-                ...$request->validated(),
-                'slug' => \Str::slug($request->validated('title')),
-            ]);
+            $vaga->update(
+                $request->validated()
+            );
             $this->commitTransaction();
 
             return redirect()->route('employer.vagas.index')

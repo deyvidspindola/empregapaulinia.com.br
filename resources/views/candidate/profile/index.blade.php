@@ -26,11 +26,13 @@ $genders = ['Male' => 'Masculino','Female' => 'Feminino','Other' => 'Outro','Pre
                     required 
                     cols="col-md-9"
                 />
-                <x-form.input 
+                <x-form.input-mask 
                     label="CPF" 
                     name="cpf" 
                     placeholder="000.000.000-00" 
                     :value="old('cpf', $user->cpf ?? '')"
+                    data-mask="000.000.000-00"
+                    required
                     cols="col-md-3"
                 />
                 <x-form.input 
@@ -53,12 +55,13 @@ $genders = ['Male' => 'Masculino','Female' => 'Feminino','Other' => 'Outro','Pre
 
         <x-ui.card title="Endereço">
             <div class="row">
-                <x-form.input 
+                <x-form.input-mask
                     label="CEP" 
                     name="zip" 
                     placeholder="00000-000" 
                     :value="old('zip', $user->zip ?? '')"
                     required 
+                    daa-mask="00000-000"
                     cols="col-md-2"
                 />
                 <x-form.input 
@@ -113,12 +116,13 @@ $genders = ['Male' => 'Masculino','Female' => 'Feminino','Other' => 'Outro','Pre
 
         <x-ui.card title="Contato">
             <div class="row">
-                <x-form.input 
+                <x-form.input-mask
                     label="Telefone" 
                     name="phone" 
                     placeholder="(00) 00000-0000" 
                     :value="old('phone', $user->phone ?? '')"
-                    required 
+                    required
+                    data-mask="(00) 00000-0000"
                     cols="col-md-4"
                 />                                               
             </div>

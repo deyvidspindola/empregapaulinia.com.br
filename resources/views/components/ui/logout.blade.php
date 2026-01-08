@@ -4,6 +4,6 @@
         @if(isset($icon))
             <i class="la {{ $icon }}"></i>
         @endif
-        {{ __('Log Out') }}
+        {{ __('Sair') }}
     </a>
 </form>

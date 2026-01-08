@@ -139,7 +139,7 @@ class JobPosting extends Model
     protected function salary(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => $value,
+            get: fn($value) => $value !== null ? number_format($value, 2, ',', '.') : null,
             set: function ($value) {
                 if ($value === null || $value === '') {
                     return null;
@@ -271,7 +271,7 @@ class JobPosting extends Model
     {
         try {
             return $date->copy()
-                ->locale(self::DATE_LOCALE)
+                ->locale('pt_BR')
                 ->isoFormat('D MMMM, YYYY');
         } catch (\Throwable) {
             // Fallback caso intl não esteja disponível

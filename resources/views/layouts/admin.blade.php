@@ -8,7 +8,8 @@
   <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet">
   <link href="{{ asset('css/style.css') }}" rel="stylesheet">
   <link href="{{ asset('css/responsive.css') }}" rel="stylesheet">
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+  
   @stack('styles')
 
   <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}" type="image/x-icon">
@@ -66,6 +67,10 @@
   <script src="{{ asset('js/owl.js') }}"></script>
   <script src="{{ asset('js/wow.js') }}"></script>
   <script src="{{ asset('js/script.js') }}"></script>
+  
+  <!-- Bootstrap Datepicker -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.pt-BR.min.js"></script>
 
   @stack('scripts')
 

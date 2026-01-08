@@ -38,7 +38,8 @@ $sizes = ['1-10','11-50','51-200','201-500','501-1000','1000+'];
                     name="tax_id" 
                     placeholder="Digite o CNPJ da empresa" 
                     :value="old('tax_id', $empresa->tax_id ?? '')"
-                    required 
+                    required
+                    data-mask="00.000.000/0000-00"
                     cols="col-md-4"
                 />
                 <x-form.input 
@@ -61,12 +62,13 @@ $sizes = ['1-10','11-50','51-200','201-500','501-1000','1000+'];
 
         <x-ui.card title="Endereço">
             <div class="row">
-                <x-form.input 
+                <x-form.input-mask
                     label="CEP" 
                     name="zip" 
                     placeholder="Digite o CEP" 
                     :value="old('zip', $empresa->zip ?? '')"
                     required 
+                    data-mask="00000-000"
                     cols="col-md-2"
                 />
                 <x-form.input 
@@ -121,12 +123,13 @@ $sizes = ['1-10','11-50','51-200','201-500','501-1000','1000+'];
 
         <x-ui.card title="Contato">
             <div class="row">
-                <x-form.input 
+                <x-form.input-mask 
                     label="Telefone" 
                     name="phone" 
                     placeholder="Digite o telefone" 
                     :value="old('phone', $empresa->phone ?? '')"
                     required 
+                    data-mask="(00) 00000-0000"
                     cols="col-md-4"
                 />
                 <x-form.input 

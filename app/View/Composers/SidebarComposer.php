@@ -22,7 +22,8 @@ class SidebarComposer
 
         // Busca os menus que correspondem à role do usuário
         $menus = SidebarMenu::where('role', $user->role)
-            ->orderBy('possition')
+            ->where('active', true)
+            ->orderBy('position')
             ->get();
 
         $view->with('sidebarMenus', $menus);

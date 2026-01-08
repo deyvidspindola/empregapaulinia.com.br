@@ -67,6 +67,7 @@ Route::middleware('auth')->group(function () {
         ->name('logout');
 
     Route::get('/alterar_senha', function () {
-        return view('employer.dashboard');
-    })->name('alterar_senha');        
+        return view('auth.reset-user-password');
+    })->name('alterar_senha'); 
+    
 });

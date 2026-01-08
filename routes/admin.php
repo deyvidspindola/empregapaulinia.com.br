@@ -7,7 +7,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'v
     })->name('dashboard');
 
     Route::get('/empresas', 'App\Http\Controllers\Admin\CompaniesController@index')->name('empresas');
-    // Route::get('/candidatos', 'App\Http\Controllers\Admin\CandidatesController@index')->name('candidatos');
+    
+    Route::resource(
+        '/menus',
+        'App\Http\Controllers\Admin\SidebarMenuController'
+    ); 
 
     Route::get('/candidatos', function () {
         return view('admin.candidatos.index');
