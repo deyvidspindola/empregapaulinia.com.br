@@ -38,6 +38,11 @@ class Company extends Model
         return $this->hasMany(JobPosting::class);
     }
 
+    public function wallet()
+    {
+        return $this->hasOne(Wallet::class);
+    }
+
     protected function createdAt(): Attribute
     {
         return Attribute::make(

@@ -25,4 +25,5 @@ abstract class Controller
     {
         Sentry::captureException($e);
     }
+
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Exception;
 use Mail;
 use App\Models\User;
 use Illuminate\View\View;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Auth\Events\Registered;
+use App\Mail\SendMail;
 
 class RegisteredUserController extends Controller
 {
@@ -30,31 +32,41 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'role' => ['required', 'in:candidate,employer'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+        try{
+            $this->beginTransaction();
+            
+            $request->validate([
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+                'role' => ['required', 'in:candidate,employer'],
+                'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => $request->role,
-        ]);
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'role' => $request->role,
+            ]);
 
-        event(new Registered($user));
+            event(new Registered($user));
 
-        Auth::login($user);
+            Auth::login($user);
 
-        $this->sendEmailNewUser($user);
+            $this->sendEmailNewUser($user);
 
-        if (Auth::user()->is_employer) {
-            return redirect()->intended(route('employer.dashboard', absolute: false));
+            $this->commitTransaction();
+
+            if (Auth::user()->is_employer) {
+                return redirect()->intended(route('employer.dashboard', absolute: false));
+            }
+
+            return redirect()->intended(route('candidate.dashboard', absolute: false));
+        } catch (\Throwable $e) {
+            $this->rollbackTransaction();
+            $this->logException($e);
+            return redirect()->back()->withInput()->withErrors(['error' => 'Ocorreu um erro ao realizar seu cadastro. Por favor, tente novamente.']);
         }
-
-        return redirect()->intended(route('candidate.dashboard', absolute: false));
     }
 
     private function sendEmailNewUser(User $user): void
@@ -62,18 +74,19 @@ class RegisteredUserController extends Controller
         try {
 
             if($user->is_employer) {
-                Mail::to($user->email)->send(new \App\Mail\NewEmployerRegistered($user));
+                SendMail::to($user->email)
+                    ->template(\App\Mail\NewEmployerRegistered::class, [$user])
+                    ->send();
                 return;
             } else if($user->is_candidate) {
-                Mail::to($user->email)->send(new \App\Mail\NewCandidateRegistered($user));
+                SendMail::to($user->email)
+                    ->template(\App\Mail\NewCandidateRegistered::class, [$user])
+                    ->send();
                 return;
             }
 
         } catch (\Exception $e) {
-            logger()->error('Erro ao enviar email de novo usuário registrado: ' . $e->getMessage(), [
-                'user_id' => $user->id,
-                'trace' => $e->getTraceAsString()
-            ]);            
+            throw new Exception("Erro ao enviar email de boas vindas para o usuário. Erro: " . $e->getMessage());
         }
     }
 

@@ -6,7 +6,7 @@ $sizes = ['1-10','11-50','51-200','201-500','501-1000','1000+'];
     @if(session('success'))
         <x-ui.message type="success" :message="session('success')" />
     @endif
-
+    
     <x-form :formConfig="$formConfig">
         <x-ui.card title="Dados Da Empresa">
             <div class="uploading-outer">

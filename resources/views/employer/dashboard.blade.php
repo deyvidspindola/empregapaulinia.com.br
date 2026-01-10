@@ -18,7 +18,7 @@
           <i class="icon la la-coins"></i>
         </div>
         <div class="right">
-          <h4>10</h4>
+          <h4>{{ $data['wallet_balance'] }}</h4>
           <p>Créditos Disponíveis</p>
         </div>
       </div>

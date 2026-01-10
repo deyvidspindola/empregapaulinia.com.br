@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Mail\SendMail;
 use Illuminate\Http\Request;
 use App\Models\ContactMessage;
 use App\Http\Controllers\Controller;
@@ -30,11 +31,12 @@ class ContactMessageController extends Controller
                 'user_agent' => $request->header('User-Agent'),
             ]);
 
-            Mail::send('emails.contact-notification', ['messageData' => $message], 
-            function ($m) use ($message) {
-                $m->to('contato@empregapaulinia.com.br', 'Emprega Paulínia')
-                  ->subject('Nova mensagem de contato: ' . $message->subject);
-            });
+            SendMail::to('contato@empregapaulinia.com.br')
+                ->view('emails.contact-notification', ['messageData' => $message])
+                ->configure(function ($m) use ($message) {
+                    $m->subject('Nova mensagem de contato: ' . $message->subject);
+                })
+                ->send();
             $this->commitTransaction();
         } catch (\Throwable $e) {
             $this->rollbackTransaction();

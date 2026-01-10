@@ -19,6 +19,7 @@ class DashboardService
         $this->getPublishedJobs();
         $this->getJobViews();
         $this->getApplications();
+        $this->getWalletBalance();
         return $this->dashboard;
     }
     private function getPublishedJobs()
@@ -40,6 +41,11 @@ class DashboardService
             ->join('job_posting_applications', 'job_postings.id', '=', 'job_posting_applications.job_posting_id')
             ->where('job_posting_applications.created_at', '>=', now()->subDays(30)->toDateString())
             ->count();
+    }
+
+    private function getWalletBalance()
+    {
+        $this->dashboard['wallet_balance'] = $this->company->wallet ? $this->company->wallet->balance : 0;
     }
 
 }
