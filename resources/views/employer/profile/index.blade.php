@@ -2,21 +2,41 @@
 $sizes = ['1-10','11-50','51-200','201-500','501-1000','1000+'];
 @endphp
 <x-admin-layout title="Dados da Empresa" subtitle="Insira os dados da sua empresa">
-
-    @if(session('success'))
-        <x-ui.message type="success" :message="session('success')" />
-    @endif
-    
     <x-form :formConfig="$formConfig">
         <x-ui.card title="Dados Da Empresa">
-            <div class="uploading-outer">
-            <div class="uploadButton">
-                <input class="uploadButton-input" type="file" name="logo" accept="image/*" id="upload" />
-                <label class="uploadButton-button ripple-effect" for="upload">Escolher Logo</label>
-                <span class="uploadButton-file-name"></span>
+            <div class="row mb-4">
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Logo da Empresa</label>
+                    <div class="d-flex align-items-start gap-4">
+                        <!-- Preview do Logo -->
+                        @if($empresa && $empresa->logo_path)    
+                            <div id="logo-preview-container" class="flex-shrink-0">
+                                <div class="logo-preview-box">
+                                    <img id="current-logo" src="{{ asset('storage/' . $empresa->logo_path) }}" alt="Logo da empresa">
+                                </div>
+                            </div>
+                        @endif
+                        
+                        <!-- Botão de Upload -->
+                        <div class="flex-grow-1">
+                            <div class="uploadButton">
+                                <input class="uploadButton-input" type="file" name="logo" accept="image/*" id="upload" />
+                                <label class="uploadButton-button ripple-effect" for="upload">
+                                    <i class="la la-cloud-upload"></i> {{ $empresa && $empresa->logo_path ? 'Alterar Logo' : 'Escolher Logo' }}
+                                </label>
+                                <span class="uploadButton-file-name"></span>
+                            </div>
+                            <div class="text mt-2">
+                                <small class="text-muted">
+                                    <i class="la la-info-circle"></i> 
+                                    Tamanho máximo: 1MB | Dimensão mínima: 330x300px | Formatos: .jpg, .png
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="text">Max file size is 1MB, Minimum dimension: 330x300 And Suitable files are .jpg & .png</div>
-            </div>            
+            
             <div class="row">
                 <x-form.input 
                     label="Nome da Empresa" 
@@ -141,5 +161,65 @@ $sizes = ['1-10','11-50','51-200','201-500','501-1000','1000+'];
                 />                                                
             </div>
         </x-ui.card>
-    </x-form>  
+    </x-form>
+    
+    @push('styles')
+    <style>
+        .logo-preview-box {
+            width: 150px;
+            height: 150px;
+            border: 2px solid #e8e8e8;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .logo-preview-box:hover {
+            border-color: #1967d2;
+            box-shadow: 0 4px 12px rgba(25,103,210,0.15);
+        }
+        
+        .logo-preview-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .logo-preview-empty {
+            flex-direction: column;
+            background: #f8f9fa;
+            border-style: dashed;
+        }
+    </style>
+    @endpush
+    
+    @push('scripts')
+    <script>
+        document.getElementById('upload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    let currentLogo = document.getElementById('current-logo');
+                    let emptyPreview = document.getElementById('empty-preview');
+                    
+                    if (currentLogo) {
+                        // Atualiza logo existente
+                        currentLogo.src = e.target.result;
+                    } else if (emptyPreview) {
+                        // Substitui o preview vazio por uma imagem
+                        emptyPreview.classList.remove('logo-preview-empty');
+                        emptyPreview.innerHTML = `<img id="current-logo" src="${e.target.result}" alt="Preview do logo">`;
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+    @endpush  
 </x-admin-layout>

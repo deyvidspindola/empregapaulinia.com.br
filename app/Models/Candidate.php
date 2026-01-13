@@ -62,6 +62,14 @@ public function user(): BelongsTo
         );
     }
 
+    protected function birthDate(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value ? \Carbon\Carbon::parse($value)->format('d/m/Y') : null,
+            set: fn ($value) => $value ? \Carbon\Carbon::createFromFormat('d/m/Y', $value)->format('Y-m-d') : null
+        );
+    }
+
     protected function phone(): Attribute
     {
         return Attribute::make(
@@ -118,22 +126,12 @@ public function user(): BelongsTo
     protected function zipFormatted(): Attribute
     {
         return Attribute::get(function () {
-            $z = preg_replace('/\D+/', '', (string) $this->zip);
+            $z = preg_replace('/\D+/', '', (string) $this->attributes['zip'] ?? '');
             if (strlen($z) === 8) {
                 return substr($z, 0, 5) . '-' . substr($z, 5, 3);
             }
-            return $this->zip;
+            return $z;
         });
-    }
-
-    protected function birthDateBr(): Attribute
-    {
-        return Attribute::get(fn () => $this->birth_date?->format('d/m/Y'));
-    }
-
-    protected function birthDate(): Attribute
-    {
-        return Attribute::set(fn () => $this->birth_date?->format('Y-m-d'));
     }
 
 }

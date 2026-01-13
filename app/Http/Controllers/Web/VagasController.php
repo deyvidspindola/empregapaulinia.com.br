@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers\Web;
 
-use Illuminate\Http\Request;
-use App\Services\WebVagasService;
-use App\Http\Controllers\Controller;
 use App\Models\JobPosting;
+use Illuminate\Http\Request;
+use App\Services\Web\VagasService;
+use App\Http\Controllers\Controller;
 use App\Models\JobCategory as Category;
 
 class VagasController extends Controller
 {
 
     public function __construct(
-        private WebVagasService $webVagasService,
+        private VagasService $vagasService,
         private Category $category
     ){}
 
     public function index(Request $request)
     {
-        $jobs = $this->webVagasService->getAllVagas($request);
+        $jobs = $this->vagasService->getPublishedJobs($request, 10, true);
         $categories = $this->category->all();
         $jobTypes = \App\Http\Enum\JobTypes::options();
         return view(
@@ -33,24 +33,17 @@ class VagasController extends Controller
 
     public function show($city, $slugOrId, Request $request)
     {
-        $job = $this->webVagasService->getVagaBySlugOrId($slugOrId);
-        $this->webVagasService->track($job->id, $request);
+        $job = $this->vagasService->getJobBySlugOrId($slugOrId, $request);
         return view('web.vagas.show', compact('job'));
     }
 
     public function apply(JobPosting $job, Request $request)
     {
-         try {
-            $applicationResult = $this->webVagasService->applyToJob($job, $request);
-            
-            if ($applicationResult['success']) {
-                return redirect()->back()->with('success', 'Candidatura realizada com sucesso!');
-            } else {
-                return redirect()->back()->with('error', $applicationResult['message']);
-            }
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Ocorreu um erro ao processar sua candidatura. Por favor, tente novamente.');
-        }
+        $this->vagasService->applyToJob($job, $request, auth()->user());
+
+        return redirect()
+            ->back()
+            ->with('success', 'Candidatura enviada com sucesso!');
     }
 
 }

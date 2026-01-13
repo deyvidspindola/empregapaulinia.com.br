@@ -1,4 +1,4 @@
-<x-web-layout>
+<x-web-layout title="Vagas de Emprego">
 
     @include(
         'web.vagas.inc.filters', 
@@ -20,15 +20,12 @@
                         @endforeach
 
                         <!-- Listing Show More -->
-                        <div class="ls-show-more">
-                            <p>Mostrando {{$jobs->count()}} de {{$jobs->total()}} Vagas</p>
-                            <div class="bar"><span class="bar-inner" style="width: {{ $jobs->total() > 0 ? ($jobs->count() / $jobs->total()) * 100 : 0 }}%"></span></div>
-                            <button class="show-more">Ver Mais</button>
-                        </div>
+                        <hr class="opacity-100">
+                        {{ $jobs->links('vendor.pagination.custom') }}
                     </div>
                 </div>
 
-                @include('web.vagas.inc.ads-sidebar')               
+                {{-- @include('web.vagas.inc.ads-sidebar')                --}}
             </div>
         </div>
     </section>

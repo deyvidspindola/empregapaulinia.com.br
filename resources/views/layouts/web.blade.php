@@ -18,7 +18,7 @@
 
     {{ $slot }}
 
-    <!-- Ads Section -->
+    {{-- <!-- Ads Section -->
     <section class="ads-section">
       <div class="auto-container">
         <div class="row wow fadeInUp">
@@ -48,7 +48,7 @@
         </div>
       </div>
     </section>
-    <!-- End Ads Section -->
+    <!-- End Ads Section --> --}}
 
     <!-- Main Footer -->
     <footer class="main-footer alternate3">
@@ -60,7 +60,7 @@
               <div class="footer-column about-widget">
                 <div class="logo">
                     <a href="{{ route('home') }}">
-                        <img src="{{ asset('images/logo.svg') }}" alt="">
+                        <img src="{{ asset('images/logo.png') }}" alt="">
                     </a>
                 </div>
                 <div class="text">Emprega Paulínia é uma plataforma de empregos dedicada a conectar candidatos talentosos com empresas inovadoras na região de Paulínia. Nossa missão é facilitar o processo de recrutamento, oferecendo uma experiência intuitiva e eficiente para ambos os lados.</div>

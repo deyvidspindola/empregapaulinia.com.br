@@ -5,7 +5,7 @@
         <div class="logo-box">
           <div class="logo">
             <a href="{{ route('home') }}">
-              <img src="{{ asset('images/logo.svg') }}" alt="" title="">
+              <img src="{{ asset('images/logo.png') }}" alt="" title="">
             </a>
           </div>
         </div>
@@ -25,7 +25,7 @@
   <div class="mobile-header">
     <div class="logo">
       <a href="{{ route('employer.dashboard') }}">
-        <img src="{{ asset('images/logo.svg') }}" alt="" title="">
+        <img src="{{ asset('images/logo.png') }}" alt="" title="">
       </a>
     </div>
     <div class="nav-outer clearfix">

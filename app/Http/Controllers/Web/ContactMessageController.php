@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Mail\SendMail;
+use App\Rules\Recaptcha;
 use Illuminate\Http\Request;
 use App\Models\ContactMessage;
 use App\Http\Controllers\Controller;
@@ -18,6 +19,9 @@ class ContactMessageController extends Controller
             'email' => 'required|email|max:255',
             'subject' => 'required|string|max:255',
             'message' => 'required|string',
+            'g-recaptcha-response' => ['required', new Recaptcha()],
+        ], [
+            'g-recaptcha-response.required' => 'Por favor, verifique o reCAPTCHA.',
         ]);
 
         try {

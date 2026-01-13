@@ -21,16 +21,14 @@ Route::group([
         'App\Http\Controllers\Employer\VagasController'
     );
     
-    Route::resource(
-        '/dados-da-empresa', 
-        'App\Http\Controllers\Employer\ProfileController'
-    )
-    ->only(['index', 'store', 'update'])
-    ->names([
-        'index' => 'profile.index',
-        'store' => 'profile.store',
-        'update' => 'profile.update',
-    ]);    
+    Route::get('/dados-da-empresa', 'App\Http\Controllers\Employer\ProfileController@index')
+        ->name('profile.index');
+    
+    Route::post('/dados-da-empresa', 'App\Http\Controllers\Employer\ProfileController@store')
+        ->name('profile.store');
+    
+    Route::put('/dados-da-empresa', 'App\Http\Controllers\Employer\ProfileController@update')
+        ->name('profile.update');    
 
 
     Route::get('/candidatos', function () {

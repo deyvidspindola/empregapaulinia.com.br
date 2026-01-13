@@ -2,22 +2,22 @@
 
 namespace App\Services;
 
-use App\Models\JobPosting;
+use App\Services\Web\VagasService;
 
 class HomeService
 {
+
+    public function __construct(
+        protected VagasService $vagasService
+    ) {}
+
+
     private $data = [];
 
     public function getHomeData()
     {
-        $this->getPublishedJobs();
+        $this->data['published_jobs'] = $this->vagasService->getPublishedJobsForHome();
         return $this->data;
     }
-
-    private function getPublishedJobs()
-    {
-        $this->data['published_jobs'] = JobPosting::active()->get();
-    }
-
 
 }

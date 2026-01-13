@@ -57,6 +57,13 @@
             />
 
             <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+              <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
+              @error('g-recaptcha-response')
+                <span class="text-danger">{{ $message }}</span>
+              @enderror
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 form-group">
               <button class="theme-btn btn-style-one" type="submit">
                 Enviar Mensagem
               </button>
@@ -70,31 +77,6 @@
   <!-- Contact Section -->
 
   <!-- Call To Action -->
-  <section class="call-to-action style-two">
-    <div class="auto-container">
-      <div class="outer-box">
-        <div class="content-column">
-          <div class="sec-title">
-            <h2>Recrutando?</h2>
-            <div class="text">
-              Anuncie suas vagas para milhões de usuários mensais e pesquise 15.8 milhões<br> 
-              de currículos em nosso banco de dados.
-            </div>
-            <a href="#" class="theme-btn btn-style-one bg-blue">
-              <span class="btn-title">
-                Comece a Recrutar Agora
-              </span>
-            </a>
-          </div>
-        </div>
-
-        <div class="image-column" style="background-image: url({{ asset('images/resource/image-1.png') }});">
-          <figure class="image">
-            <img src="{{ asset('images/resource/image-1.png') }}" alt="">
-          </figure>
-        </div>
-      </div>
-    </div>
-  </section>
+  @include('inc.ads')
   <!-- End Call To Action -->
 </x-web-layout>

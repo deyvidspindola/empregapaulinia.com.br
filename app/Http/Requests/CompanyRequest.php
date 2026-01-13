@@ -47,7 +47,7 @@ class CompanyRequest extends FormRequest
      */
     public function rules(): array
     {
-        $companyId = $this->route('dados_da_empresa');
+        $companyId = $this->user()->company?->id;
         
         return [
             // Empresa

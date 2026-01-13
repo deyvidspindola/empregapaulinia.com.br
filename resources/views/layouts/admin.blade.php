@@ -41,6 +41,8 @@
           <h3>{{ $title }}</h3>
           <div class="text">{{ $subtitle }}</div>
         </div>
+        
+        <x-ui.message />
 
         {{ $slot }}
       </div>

@@ -3,8 +3,9 @@ namespace App\Mail;
 
 use Exception;
 use App\Models\EmailSend;
+use App\Exceptions\ServerException;
 use Illuminate\Support\Facades\Mail;
-use Sentry\Laravel\Facade as Sentry;
+use App\Exceptions\ValidationException;
 
 class SendMail
 {
@@ -19,12 +20,13 @@ class SendMail
     /**
      * Envia o email
      * 
-     * @throws Exception
+        * @throws ValidationException
+        * @throws ServerException
      */
     public function send(): void
     {
         if (!$this->template && !$this->viewName) {
-            throw new Exception('Template ou view de email não foi definido. Use o método template() ou view() antes de enviar.');
+            throw new ValidationException('Template ou view de email não foi definido. Use o método template() ou view() antes de enviar.');
         }
 
         try {
@@ -46,9 +48,7 @@ class SendMail
             
             $this->logSendMail(true);
         } catch (Exception $e) {
-            Sentry::captureException($e);
-            $this->logSendMail(false, $e->getMessage());
-            throw $e;
+            throw new ServerException('Erro ao enviar email: ' . $e->getMessage());
         }
     }
 

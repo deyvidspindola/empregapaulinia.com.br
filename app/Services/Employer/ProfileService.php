@@ -16,40 +16,39 @@ class ProfileService
     )
     {}
 
-    public function store(array $data): Company
+    public function store(array $data, $user): Company
     {
         try {
-            DB::beginTransaction();            
 
-            if (isset($data['logo'])) {
-                $data['logo_path'] = $data['logo']->store('companies/logos', 'public');
-            }
+            return DB::transaction(function () use ($data, $user): Company {
+                if (isset($data['logo'])) {
+                    $data['logo_path'] = $data['logo']->store('companies/image_profile', 'public');
+                }
 
-            unset($data['logo']);
+                unset($data['logo']);
 
-            $company = Company::create([
-                ...$data,
-                'user_id' => auth()->id(),
-            ]);
+                $company = Company::create([
+                    ...$data,
+                    'user_id' => $user->id,
+                ]);
 
-            User::where('id', auth()->id())
-                ->update(['email_verified_at' => now()]);
+                User::whereKey($user->id)
+                    ->update(['email_verified_at' => now()]);
 
-            // Credita créditos iniciais
-            $initialCredits = setting('initial_credits', 30);
-            $this->walletService->credit(
-                companyId: $company->id,
-                amount: $initialCredits,
-                reason: 'initial_credits',
-                meta: ['profile_creation' => true],
-                actorUserId: auth()->id()
-            );
+                // Credita créditos iniciais
+                $initialCredits = setting('initial_credits', 30);
+                $this->walletService->credit(
+                    companyId: $company->id,
+                    amount: $initialCredits,
+                    reason: 'initial_credits',
+                    meta: ['profile_creation' => true],
+                    actorUserId: $user->id
+                );
 
-            DB::commit();
-            return $company;
+                return $company;
+            });
                 
         } catch (\Exception $e) {
-            DB::rollBack();
             throw new BusinessException('Erro ao criar perfil da empresa', previous: $e);
         }    
     }
@@ -57,26 +56,25 @@ class ProfileService
     public function update(Company $company, array $data): Company
     {
         try {
-            DB::beginTransaction();
 
-            if (isset($data['logo'])) {
-                // Remove logo antiga se existir
-                if ($company->logo_path && \Storage::disk('public')->exists($company->logo_path)) {
-                    \Storage::disk('public')->delete($company->logo_path);
+            return DB::transaction(function () use ($company, $data): Company {
+                if (isset($data['logo'])) {
+                    // Remove logo antiga se existir
+                    if ($company->logo_path && \Storage::disk('public')->exists($company->logo_path)) {
+                        \Storage::disk('public')->delete($company->logo_path);
+                    }
+
+                    $data['logo_path'] = $data['logo']->store('companies/logos', 'public');
+                    unset($data['logo']);
                 }
+                
+                $company->update($data);
+                $company->refresh();
 
-                $data['logo_path'] = $data['logo']->store('companies/logos', 'public');
-            }
-
-            unset($data['logo']);
-
-            $company->update($data);
-
-            DB::commit();
-            return $company;
+                return $company;
+            });
 
         } catch (\Exception $e) {
-            DB::rollBack();
             throw new BusinessException('Erro ao atualizar perfil da empresa', previous: $e);
         }
     }

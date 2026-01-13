@@ -8,15 +8,21 @@ use Illuminate\View\View;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\CandidateRequest;
+use App\Services\Candidate\ProfileService;
 
 class ProfileController extends Controller
 {
+
+    public function __construct(
+        private ProfileService $profileService
+    ){}
+
     public function index(): View
     {
         $user = auth()->user()->candidate;
 
         $formConfig = [
-            'action' => $user ? route('candidate.profile.update', $user->id) : route('candidate.profile.store'),
+            'action' => $user ? route('candidate.profile.update') : route('candidate.profile.store'),
             'method' => $user ? 'PUT' : 'POST',
         ];
         
@@ -25,50 +31,28 @@ class ProfileController extends Controller
 
     public function store(CandidateRequest $request): RedirectResponse
     {
-        $data = $request->validated();
-        
-        if ($request->hasFile('logo')) {
-            $data['logo_path'] = $request->file('logo')->store('candidates/logos', 'public');
-        }
-        
-        unset($data['logo']);
-        
-        Candidate::create([
-            ...$data,
-            'user_id' => auth()->id(),
-        ]);
+        $this->profileService->store(
+            $request->validated(), 
+            auth()->user()
+        );
 
-        User::where('id', auth()->id())
-            ->update([
-                'name' => $data['full_name'],
-                'email_verified_at' => now()
-            ]);
-        
         return redirect()->route('candidate.profile.index')
-            ->with('success', 'Dados do candidato criados com sucesso.');   
+            ->with('success', 'Perfil do candidato criado com sucesso.');
     }
 
-    public function update(CandidateRequest $request, Candidate $candidate): RedirectResponse
+    public function update(CandidateRequest $request): RedirectResponse
     {
-        $data = $request->validated();
+        $candidate = auth()->user()->candidate;
         
-        // Processa upload da logo
-        if ($request->hasFile('logo')) {
-            // Remove logo antiga se existir
-            if ($candidate->logo_path && \Storage::disk('public')->exists($candidate->logo_path)) {
-                \Storage::disk('public')->delete($candidate->logo_path);
-            }
-            
-            $data['logo_path'] = $request->file('logo')->store('candidates/logos', 'public');
+        if (!$candidate) {
+            return redirect()->route('candidate.profile.index')
+                ->with('error', 'Perfil não encontrado.');
         }
         
-        // Remove o campo 'logo' se existir, já que salvamos 'logo_path'
-        unset($data['logo']);
-        
-        $candidate->update($data);
+        $this->profileService->update($candidate, $request->validated());
 
         return redirect()->route('candidate.profile.index')
-            ->with('success', 'Dados do candidato atualizados com sucesso.');
+            ->with('success', 'Perfil do candidato atualizado com sucesso.');
     }
 
 

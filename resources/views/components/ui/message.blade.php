@@ -6,33 +6,33 @@
         'warning' => 'Atenção',
     ];
 @endphp
+@if(!session()->hasAny(array_keys($types)))
+    @php
+        return;
+    @endphp
+@endif
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-        @foreach ($types as $type => $label)
-            @if (session()->has($type))
-                <div
-                    class="flash-message message-box {{ $type }}"
-                    id="message-box-{{ $type }}-{{ uniqid() }}"
-                    style="margin-bottom: 30px; animation: slideDown 0.4s ease-out;"
-                >
-                    <p>{{ session($type) }}</p>
+@foreach ($types as $type => $label)
+    @if (session()->has($type))
+        <div
+            class="flash-message message-box {{ $type }}"
+            id="message-box-{{ $type }}-{{ uniqid() }}"
+            style="margin-bottom: 30px; animation: slideDown 0.4s ease-out;"
+        >
+            <p>{{ session($type) }}</p>
 
-                    <button
-                        type="button"
-                        class="close-btn"
-                        onclick="closeMessage(this.parentElement)"
-                        aria-label="Fechar mensagem"
-                    >
-                        ✕
-                    </button>
-                </div>
-            @endif
-        @endforeach      
+            <button
+                type="button"
+                class="close-btn"
+                onclick="closeMessage(this.parentElement)"
+                aria-label="Fechar mensagem"
+            >
+                ✕
+            </button>
         </div>
-    </div>
-</div>
+    @endif
+@endforeach      
+
 <script>
     function closeMessage(element) {
         if (!element) return;

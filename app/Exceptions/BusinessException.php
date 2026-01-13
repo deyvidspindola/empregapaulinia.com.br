@@ -88,6 +88,6 @@ class BusinessException extends Exception
         return redirect()
             ->back()
             ->withInput()
-            ->withErrors(['error' => $this->getMessage()]);
+            ->with('error', $this->getMessage());
     }
 }

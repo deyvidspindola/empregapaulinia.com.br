@@ -26,15 +26,16 @@ return new class extends Migration
             $table->enum('level', ['Júnior','Pleno','Sênior','Especialista','Líder'])->nullable();
             $table->date('deadline')->nullable();
             $table->unsignedInteger('openings')->default(1);
+            $table->boolean('is_company_visible')->default(true);
+            $table->enum('apply_method', ['platform', 'email'])->default('platform');            
+            $table->string('apply_email')->nullable();                        
             $table->boolean('is_published')->default(true);
             $table->json('tags')->nullable();
             $table->text('description');
             $table->text('requirements');
             $table->text('benefits')->nullable();
             $table->text('observation')->nullable();
-            $table->boolean('is_company_visible')->default(true);
-            $table->enum('apply_method', ['platform', 'email'])->default('platform');
-            $table->string('apply_email')->nullable();            
+            
             $table->timestamps();
             $table->index(['is_published','deadline']);
         });

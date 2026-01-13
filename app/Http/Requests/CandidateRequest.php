@@ -37,7 +37,7 @@ class CandidateRequest extends FormRequest
 
     public function rules(): array
     {
-        $candidateId = $this->route('candidate') ? $this->route('candidate')->id : null;
+        $candidateId = $this->user()->candidate?->id;
         
         return [
             // Dados pessoais

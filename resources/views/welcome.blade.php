@@ -87,10 +87,10 @@
             </div>
           </div>
 
-          <div class="recent-column col-xl-3 col-lg-12 col-md-12 col-sm-12">
+          {{-- <div class="recent-column col-xl-3 col-lg-12 col-md-12 col-sm-12">
             <div class="sec-title">
-              <h2>Vagas Recentes</h2>
-              <div class="text">Conheça seu valor e encontre o emprego</div>
+              <h2>&nbsp;</h2>
+              <div class="text">&nbsp;</div>
             </div>
 
             <!-- Job Block -->
@@ -118,10 +118,12 @@
                 <div class="location"><span class="icon flaticon-map-locator"></span> London, UK</div>
               </div>
             </div>
-          </div>
+          </div> --}}
         </div>
       </div>
     </section>
     <!-- End Job Section -->
+
+    @include('inc.ads')
 
 </x-web-layout>
