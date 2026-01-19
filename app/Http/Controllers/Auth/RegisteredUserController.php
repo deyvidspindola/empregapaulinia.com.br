@@ -32,15 +32,25 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'role' => ['required', 'in:candidate,employer'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ], [
+            'name.required' => 'O campo nome é obrigatório.',
+            'name.max' => 'O nome não pode ter mais de 255 caracteres.',
+            'email.required' => 'O campo e-mail é obrigatório.',
+            'email.email' => 'Informe um e-mail válido.',
+            'email.unique' => 'Este e-mail já está cadastrado.',
+            'role.required' => 'Selecione um tipo de conta.',
+            'role.in' => 'Tipo de conta inválido.',
+            'password.required' => 'O campo senha é obrigatório.',
+            'password.confirmed' => 'A confirmação da senha não confere.',
+        ]);
+
         try{
             $this->beginTransaction();
-            
-            $request->validate([
-                'name' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-                'role' => ['required', 'in:candidate,employer'],
-                'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            ]);
 
             $user = User::create([
                 'name' => $request->name,
