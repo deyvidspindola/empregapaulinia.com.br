@@ -13,7 +13,7 @@
             ? asset('storage/' . auth()->user()->company->logo_path)
             : asset('images/resource/company-6.png');
     } else {
-        $logo = auth()->user() && auth()->user()->is_candidate && auth()->user()->candidate->logo_path
+        $logo = auth()->user() && auth()->user()->is_candidate && auth()->user()->candidate && auth()->user()->candidate->logo_path
             ? asset('storage/' . auth()->user()->candidate->logo_path)
             : asset('images/resource/company-6.jpg');
     }
