@@ -46,7 +46,7 @@
     <!-- End About Section Three -->
 
     <!-- Call To Action Two -->
-    <section class="call-to-action-two" style="background-image: url(images/background/1.jpg);">
+    <section class="call-to-action-two" style="background-image: url({{ asset('images/background/1.jpg') }});">
       <div class="auto-container">
         <div class="sec-title light text-center">
           <h2>As Vagas dos Seus Sonhos Estão Esperando</h2>
@@ -73,7 +73,7 @@
           <!-- Work Block -->
           <div class="work-block col-lg-4 col-md-6 col-sm-12">
             <div class="inner-box">
-              <figure class="image"><img src="images/resource/work-1.png" alt=""></figure>
+              <figure class="image"><img src="{{ asset('images/resource/work-1.png') }}" alt=""></figure>
               <h5>Crie Seu Perfil Gratuitamente</h5>
               <p>Cadastre-se, anexe seu currículo e complete seu perfil profissional para que as empresas possam encontrar você.</p>
             </div>
@@ -82,7 +82,7 @@
           <!-- Work Block -->
           <div class="work-block col-lg-4 col-md-6 col-sm-12">
             <div class="inner-box">
-              <figure class="image"><img src="images/resource/work-2.png" alt=""></figure>
+              <figure class="image"><img src="{{ asset('images/resource/work-2.png') }}" alt=""></figure>
               <h5>Encontre Vagas Compatíveis</h5>
               <p>Navegue por centenas de oportunidades e candidate-se às vagas que mais combinam com seu perfil e experiência.</p>
             </div>
@@ -91,7 +91,7 @@
           <!-- Work Block -->
           <div class="work-block col-lg-4 col-md-6 col-sm-12">
             <div class="inner-box">
-              <figure class="image"><img src="images/resource/work-3.png" alt=""></figure>
+              <figure class="image"><img src="{{ asset('images/resource/work-3.png') }}" alt=""></figure>
               <h5>Acompanhe Suas Candidaturas</h5>
               <p>Gerencie todas as suas aplicações em um só lugar e receba notificações sobre o andamento de cada processo seletivo.</p>
             </div>
