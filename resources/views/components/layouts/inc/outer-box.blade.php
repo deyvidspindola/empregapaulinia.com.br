@@ -1,24 +1,21 @@
 @php
+    $user = auth()->user();
+    
+    if ($user) {
+        $route = $user->is_admin 
+            ? route('admin.dashboard')
+            : ($user->is_employer ? route('employer.dashboard') : route('candidate.dashboard'));
 
-    $route = auth()->user() && auth()->user()->is_employer
-        ? route('employer.dashboard')
-        : route('candidate.dashboard');
-
-    $route = auth()->user() && auth()->user()->is_admin
-        ? route('admin.dashboard')
-        : $route;
-
-    if(auth()->user() && auth()->user()->company){
-        $logo = auth()->user() && auth()->user()->company && auth()->user()->company->logo_path
-            ? asset('storage/' . auth()->user()->company->logo_path)
-            : asset('images/resource/company-6.png');
-    } else {
-        $logo = auth()->user() && auth()->user()->is_candidate && auth()->user()->candidate && auth()->user()->candidate->logo_path
-            ? asset('storage/' . auth()->user()->candidate->logo_path)
-            : asset('images/resource/company-6.jpg');
+        if ($user->company && $user->company->logo_path) {
+            $logo = asset('storage/' . $user->company->logo_path);
+        } elseif ($user->is_candidate && $user->candidate && $user->candidate->logo_path) {
+            $logo = asset('storage/' . $user->candidate->logo_path);
+        } else {
+            $logo = $user->is_employer 
+                ? asset('images/resource/company-6.png')
+                : asset('images/resource/company-6.jpg');
+        }
     }
-
-
 @endphp
 <div class="outer-box">
     @if(!auth()->user())

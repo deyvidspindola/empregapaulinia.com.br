@@ -44,6 +44,10 @@ Route::get('/termos-uso', function () {
     return view('terms');
 })->name('terms');
 
+Route::get('/sobre-nos', function () {
+    return view('about');
+})->name('about');
+
 
 require __DIR__.'/auth.php';
 require __DIR__.'/admin.php';
