@@ -37,11 +37,6 @@ Route::middleware('guest')->group(function () {
     Route::get('/login-popup', function(){
         return view('auth.login-popup');
     })->name('login.popup');
-
-    Route::get('/register-popup', function(){
-        return view('auth.register-popup');
-    })->name('register.popup');
-
 });
 
 Route::middleware('auth')->group(function () {

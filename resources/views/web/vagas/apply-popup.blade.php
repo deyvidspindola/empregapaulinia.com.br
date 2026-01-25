@@ -9,7 +9,7 @@
                     <p>Para se candidatar, você precisa estar logado.</p>
                     <a href="{{ route('login.popup') }}" class="call-modal login-link">Faça login aqui</a>
                     <span> ou </span>
-                    <a href="{{ route('register.popup') }}" class="call-modal register-link">Se cadastre aqui</a>
+                    <a href="{{ route('register') }}" class="register-link">Se cadastre aqui</a>
                 @else
                     <form method="POST" action="{{ route('jobs.apply', ['job' => $jobId]) }}" enctype="multipart/form-data">
                         @csrf
