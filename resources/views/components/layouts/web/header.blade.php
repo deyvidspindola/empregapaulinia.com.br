@@ -16,6 +16,7 @@
                     <ul class="navigation" id="navbar">
                         <li><a href="{{ route('home') }}">Home</a></li>
                         <li><a href="{{ route('jobs') }}">Vagas</a></li>
+                        <li><a href="{{ route('contact') }}">Contato</a></li>
                     </ul>
                 </nav>
                 <!-- Main Menu End-->
