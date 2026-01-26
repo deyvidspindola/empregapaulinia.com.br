@@ -16,8 +16,7 @@ class CompaniesController extends Controller
 
     public function index()
     {
-        $companies = $this->company->all();
+        $companies = $this->company->orderBy('created_at', 'desc')->paginate(5);
         return view('admin.empresas.index', compact('companies'));
     }
-
 }

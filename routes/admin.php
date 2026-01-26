@@ -13,9 +13,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'v
         'App\Http\Controllers\Admin\SidebarMenuController'
     ); 
 
-    Route::get('/candidatos', function () {
-        return view('admin.candidatos.index');
-    })->name('candidatos');    
+    Route::get('/candidatos', 'App\Http\Controllers\Admin\CandidatesController@index')->name('candidatos');
 
     Route::get('/anuncios', function () {
         return view('admin.anuncios.index');

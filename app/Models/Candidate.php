@@ -134,4 +134,21 @@ public function user(): BelongsTo
         });
     }
 
+    protected function age(): Attribute
+    {
+        return Attribute::get(function () {
+            if (!isset($this->attributes['birth_date'])) {
+                return null;
+            }
+            return \Carbon\Carbon::parse($this->attributes['birth_date'])->age;
+        });
+    }
+
+    protected function cadastroEm(): Attribute
+    {
+        return Attribute::get(function () {
+            return $this->created_at ? $this->created_at->format('d/m/Y') : null;
+        });
+    }
+
 }
