@@ -36,6 +36,9 @@ $genders = ['Male' => 'Masculino','Female' => 'Feminino','Other' => 'Outro','Pre
                                     <i class="la la-info-circle"></i> 
                                     Tamanho máximo: 1MB | Dimensão mínima: 330x300px | Formatos: .jpg, .png
                                 </small>
+                                @error('logo')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror                                
                             </div>
                         </div>
                     </div>

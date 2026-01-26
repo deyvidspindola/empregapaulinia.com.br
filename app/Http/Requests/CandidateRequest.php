@@ -80,7 +80,9 @@ class CandidateRequest extends FormRequest
             'before'   => 'O :attribute deve ser anterior a hoje.',
             'in'       => 'O valor selecionado em :attribute é inválido.',
             // unidades amigáveis
+            'logo.uploaded' => 'A imagem não pode exceder 2MB.',
             'logo.max'   => 'A imagem não pode exceder 2MB.',
+            'resume.uploaded' => 'O currículo não pode exceder 4MB.',
             'resume.max' => 'O currículo não pode exceder 4MB.',
         ];
     }

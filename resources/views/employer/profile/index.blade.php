@@ -30,6 +30,9 @@ $sizes = ['1-10','11-50','51-200','201-500','501-1000','1000+'];
                                 <small class="text-muted">
                                     <i class="la la-info-circle"></i> 
                                     Tamanho máximo: 1MB | Dimensão mínima: 330x300px | Formatos: .jpg, .png
+                                    @error('logo')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror                                       
                                 </small>
                             </div>
                         </div>

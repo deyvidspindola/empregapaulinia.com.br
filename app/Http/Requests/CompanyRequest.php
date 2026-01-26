@@ -89,7 +89,9 @@ class CompanyRequest extends FormRequest
             'image'    => 'O arquivo de :attribute deve ser uma imagem.',
             'mimes'    => 'O :attribute deve ser do tipo: :values.',
             'max'      => 'O :attribute não pode ter mais que :max caracteres.',
-            'in'       => 'O valor selecionado em :attribute é inválido.',          
+            'in'       => 'O valor selecionado em :attribute é inválido.',
+            'logo.uploaded' => 'A imagem não pode exceder 2MB.',
+            'logo.max'   => 'A imagem não pode exceder 2MB.',
         ];
     }
     public function attributes(): array
