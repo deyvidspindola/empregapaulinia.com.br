@@ -30,17 +30,21 @@
     @enderror
 </div>
 
+@once
+    @push('scripts')
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    @endpush
+@endonce
+
 @push('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script>
         $(document).ready(function(){
-            if('{{ $attributes->get('data-masktype') }}' == 'money') {
+            @if($attributes->has('data-masktype') && $attributes->get('data-masktype') == 'money')
                 $("#{{ $name }}").maskMoney({prefix:'R$ ', allowNegative: true, thousands:'.', decimal:',', affixesStay: false});
-                return;
-            }
-
-            $('#{{ $name }}').mask('{{ $attributes->get('data-mask') }}');
+            @elseif($attributes->has('data-mask'))
+                $('#{{ $name }}').mask('{{ $attributes->get('data-mask') }}');
+            @endif
         });
     </script>
 @endpush

@@ -84,7 +84,8 @@ $sizes = ['1-10','11-50','51-200','201-500','501-1000','1000+'];
             <div class="row">
                 <x-form.input-mask
                     label="CEP" 
-                    name="zip" 
+                    name="zip"
+                    id="zip"
                     placeholder="Digite o CEP" 
                     :value="old('zip', $empresa->zip ?? '')"
                     required 
@@ -93,7 +94,8 @@ $sizes = ['1-10','11-50','51-200','201-500','501-1000','1000+'];
                 />
                 <x-form.input 
                     label="Endereço" 
-                    name="street" 
+                    name="street"
+                    id="street"
                     placeholder="Digite o endereço" 
                     :value="old('street', $empresa->street ?? '')"
                     required
@@ -101,7 +103,8 @@ $sizes = ['1-10','11-50','51-200','201-500','501-1000','1000+'];
                 />
                 <x-form.input 
                     label="Número" 
-                    name="number" 
+                    name="number"
+                    id="number"
                     placeholder="Digite o número" 
                     :value="old('number', $empresa->number ?? '')"
                     required 
@@ -109,14 +112,16 @@ $sizes = ['1-10','11-50','51-200','201-500','501-1000','1000+'];
                 />
                 <x-form.input 
                     label="Complemento" 
-                    name="complement" 
+                    name="complement"
+                    id="complement"
                     placeholder="Digite o complemento" 
                     :value="old('complement', $empresa->complement ?? '')"
                     cols="col-md-2"
                 />                                            
                 <x-form.input 
                     label="Bairro" 
-                    name="neighborhood" 
+                    name="neighborhood"
+                    id="neighborhood"
                     placeholder="Digite o bairro" 
                     :value="old('neighborhood', $empresa->neighborhood ?? '')"
                     required 
@@ -124,7 +129,8 @@ $sizes = ['1-10','11-50','51-200','201-500','501-1000','1000+'];
                 />
                 <x-form.input 
                     label="Cidade" 
-                    name="city" 
+                    name="city"
+                    id="city"
                     placeholder="Digite a cidade" 
                     :value="old('city', $empresa->city ?? '')"
                     required 
@@ -132,7 +138,8 @@ $sizes = ['1-10','11-50','51-200','201-500','501-1000','1000+'];
                 />
                 <x-form.input 
                     label="Estado" 
-                    name="state" 
+                    name="state"
+                    id="state"
                     placeholder="Digite o estado" 
                     :value="old('state', $empresa->state ?? '')"
                     required 
@@ -200,25 +207,233 @@ $sizes = ['1-10','11-50','51-200','201-500','501-1000','1000+'];
     
     @push('scripts')
     <script>
-        document.getElementById('upload').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    let currentLogo = document.getElementById('current-logo');
-                    let emptyPreview = document.getElementById('empty-preview');
-                    
-                    if (currentLogo) {
-                        // Atualiza logo existente
-                        currentLogo.src = e.target.result;
-                    } else if (emptyPreview) {
-                        // Substitui o preview vazio por uma imagem
-                        emptyPreview.classList.remove('logo-preview-empty');
-                        emptyPreview.innerHTML = `<img id="current-logo" src="${e.target.result}" alt="Preview do logo">`;
+        $(document).ready(function() {
+            // Preview do logo ao selecionar
+            const uploadInput = document.getElementById('upload');
+            if (uploadInput) {
+                uploadInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            let currentLogo = document.getElementById('current-logo');
+                            let emptyPreview = document.getElementById('empty-preview');
+                            
+                            if (currentLogo) {
+                                // Atualiza logo existente
+                                currentLogo.src = e.target.result;
+                            } else if (emptyPreview) {
+                                // Substitui o preview vazio por uma imagem
+                                emptyPreview.classList.remove('logo-preview-empty');
+                                emptyPreview.innerHTML = `<img id="current-logo" src="${e.target.result}" alt="Preview do logo">`;
+                            }
+                        };
+                        reader.readAsDataURL(file);
                     }
-                };
-                reader.readAsDataURL(file);
+                });
             }
+
+            // ========== BUSCA DE CEP VIA VIACEP ==========
+            const CepAutocomplete = {
+                timer: null,
+                isSearching: false,
+                
+                // Cache dos elementos do formulário
+                elements: {
+                    cep: null,
+                    street: null,
+                    neighborhood: null,
+                    city: null,
+                    state: null,
+                    number: null
+                },
+                
+                // Inicializa o autocomplete
+                init: function() {
+                    this.cacheElements();
+                    
+                    if (!this.elements.cep) {
+                        console.error('Campo CEP (#zip) não foi encontrado no formulário');
+                        return;
+                    }
+                    
+                    this.bindEvents();
+                    console.log('Autocomplete de CEP inicializado com sucesso');
+                },
+                
+                // Armazena referências dos elementos
+                cacheElements: function() {
+                    this.elements.cep = $('#zip');
+                    this.elements.street = $('#street');
+                    this.elements.neighborhood = $('#neighborhood');
+                    this.elements.city = $('#city');
+                    this.elements.state = $('#state');
+                    this.elements.number = $('#number');
+                },
+                
+                // Vincula eventos ao campo CEP
+                bindEvents: function() {
+                    const self = this;
+                    
+                    // Evento de digitação (com debounce)
+                    this.elements.cep.on('input keyup', function() {
+                        clearTimeout(self.timer);
+                        const cep = self.cleanCep($(this).val());
+                        
+                        if (cep.length === 8) {
+                            self.timer = setTimeout(() => {
+                                self.searchCep(cep);
+                            }, 600);
+                        } else {
+                            self.clearAddressFields();
+                        }
+                    });
+                    
+                    // Evento de perda de foco
+                    this.elements.cep.on('blur', function() {
+                        clearTimeout(self.timer);
+                        const cep = self.cleanCep($(this).val());
+                        
+                        if (cep.length === 8) {
+                            self.searchCep(cep);
+                        }
+                    });
+                },
+                
+                // Remove caracteres não numéricos do CEP
+                cleanCep: function(cep) {
+                    return String(cep || '').replace(/\D/g, '');
+                },
+                
+                // Limpa os campos de endereço
+                clearAddressFields: function() {
+                    if (!this.isSearching) {
+                        this.elements.street.val('');
+                        this.elements.neighborhood.val('');
+                        this.elements.city.val('');
+                        this.elements.state.val('');
+                    }
+                },
+                
+                // Busca o CEP na API ViaCEP
+                searchCep: function(cep) {
+                    if (this.isSearching || cep.length !== 8) {
+                        return;
+                    }
+                    
+                    this.isSearching = true;
+                    this.setLoadingState(true);
+                    
+                    const self = this;
+                    
+                    $.ajax({
+                        url: `https://viacep.com.br/ws/${cep}/json/`,
+                        method: 'GET',
+                        dataType: 'json',
+                        timeout: 10000,
+                        cache: false
+                    })
+                    .done(function(data) {
+                        if (data.erro) {
+                            self.showError('CEP não encontrado. Por favor, verifique o número digitado.');
+                            self.clearAddressFields();
+                        } else {
+                            self.fillAddress(data);
+                        }
+                    })
+                    .fail(function(jqXHR, textStatus) {
+                        if (textStatus === 'timeout') {
+                            self.showError('Tempo esgotado ao buscar CEP. Verifique sua conexão.');
+                        } else {
+                            self.showError('Erro ao buscar CEP. Tente novamente.');
+                        }
+                        console.error('Erro ao buscar CEP:', textStatus);
+                    })
+                    .always(function() {
+                        self.isSearching = false;
+                        self.setLoadingState(false);
+                    });
+                },
+                
+                // Preenche os campos com os dados do ViaCEP
+                fillAddress: function(data) {
+                    // Preenche apenas os campos que vieram preenchidos da API
+                    if (data.logradouro) {
+                        this.elements.street.val(data.logradouro).prop('readonly', true);
+                    } else {
+                        this.elements.street.val('').prop('readonly', false);
+                    }
+                    
+                    if (data.bairro) {
+                        this.elements.neighborhood.val(data.bairro).prop('readonly', true);
+                    } else {
+                        this.elements.neighborhood.val('').prop('readonly', false);
+                    }
+                    
+                    if (data.localidade) {
+                        this.elements.city.val(data.localidade).prop('readonly', true);
+                    } else {
+                        this.elements.city.val('').prop('readonly', false);
+                    }
+                    
+                    if (data.uf) {
+                        this.elements.state.val(data.uf).prop('readonly', true);
+                    } else {
+                        this.elements.state.val('').prop('readonly', false);
+                    }
+                    
+                    // Move o foco para o campo de número
+                    setTimeout(() => {
+                        this.elements.number.focus().select();
+                    }, 150);
+                    
+                    console.log('Endereço preenchido com sucesso:', data);
+                },
+                
+                // Define o estado de carregamento dos campos
+                setLoadingState: function(isLoading) {
+                    const fields = [
+                        this.elements.street,
+                        this.elements.neighborhood,
+                        this.elements.city,
+                        this.elements.state
+                    ];
+                    
+                    fields.forEach(($field) => {
+                        if ($field && $field.length) {
+                            $field.prop('disabled', isLoading);
+                            
+                            if (isLoading) {
+                                $field.css({
+                                    'opacity': '0.5',
+                                    'cursor': 'wait'
+                                });
+                            } else {
+                                $field.css({
+                                    'opacity': '1',
+                                    'cursor': ''
+                                });
+                            }
+                        }
+                    });
+                    
+                    // Adiciona indicador visual no campo CEP
+                    if (isLoading) {
+                        this.elements.cep.addClass('border-primary');
+                    } else {
+                        this.elements.cep.removeClass('border-primary');
+                    }
+                },
+                
+                // Exibe mensagem de erro
+                showError: function(message) {
+                    // Você pode customizar esta função para usar um sistema de notificações mais sofisticado
+                    alert(message);
+                }
+            };
+            
+            // Inicializa o autocomplete quando o documento estiver pronto
+            CepAutocomplete.init();
         });
     </script>
     @endpush  
