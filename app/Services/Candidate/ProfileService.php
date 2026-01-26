@@ -51,7 +51,7 @@ class ProfileService
                         \Storage::disk('public')->delete($candidate->logo_path);
                     }
 
-                    $data['logo_path'] = $data['logo']->store('companies/logos', 'public');
+                    $data['logo_path'] = $data['logo']->store('candidates/profile', 'public');
                 }
 
                 unset($data['logo']);

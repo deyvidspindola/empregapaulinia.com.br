@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Candidate;
 
-use App\Models\User;
-use App\Models\Candidate;
 use Illuminate\View\View;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
