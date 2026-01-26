@@ -19,7 +19,7 @@ class ProfileController extends Controller
     public function index(): View
     {
         $empresa = auth()->user()->company;
-
+        
         $formConfig = [
             'action' => $empresa ? route('employer.profile.update') : route('employer.profile.store'),
             'method' => $empresa ? 'PUT' : 'POST',
@@ -48,7 +48,7 @@ class ProfileController extends Controller
                 ->with('error', 'Empresa não encontrada.');
         }
         
-        $this->profileService->update($company, $request->validated());
+        $this->profileService->update($company, $request->validated(), auth()->user());
 
         return redirect()->route('employer.profile.index')
             ->with('success', 'Perfil da empresa atualizado com sucesso.');

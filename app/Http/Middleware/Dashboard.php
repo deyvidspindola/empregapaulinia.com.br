@@ -22,7 +22,8 @@ class Dashboard
             $user->is_employer &&   
             $user->email_verified_at === null && 
             $routeName !== 'employer.profile.index' &&
-            $routeName !== 'employer.profile.store'
+            $routeName !== 'employer.profile.store' &&
+            $routeName !== 'employer.profile.update'
         ) {
             return redirect()->route('employer.profile.index');
         }
@@ -31,7 +32,8 @@ class Dashboard
             $user->is_candidate &&
             $user->email_verified_at === null && 
             $routeName !== 'candidate.profile.index' &&
-            $routeName !== 'candidate.profile.store'
+            $routeName !== 'candidate.profile.store' &&
+            $routeName !== 'candidate.profile.update'
         ) {
             return redirect()->route('candidate.profile.index');
         }
